@@ -23,7 +23,7 @@
                         <a class="btn btn-primary d-inline-block"
                            th:href="@{/sprintresults/create(sprintId = ${sprint.id})}" role="button"
                            th:if="${canEditSprint == true}">Complete Sprint</a>
-                        <a class="btn btn-primary" th:href="@{/sprint/edit(sprintId=${sprint.id})}"
+                        <a class="btn btn-primary" th:href="@{/sprints/edit(sprintId=${sprint.id})}"
                            role="button" th:if="${canEditSprint == true}">Edit</a>
                         <input type="submit" class="btn btn-danger" value="Delete" th:method="DELETE"
                                th:if="${canEditSprint == true}"/>
