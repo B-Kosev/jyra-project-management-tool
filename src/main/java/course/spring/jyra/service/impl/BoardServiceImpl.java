@@ -21,11 +21,11 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public List<Board> findAll() {
-        return boardRepository.findAll();
+        return (List<Board>) boardRepository.findAll();
     }
 
     @Override
-    public Board findById(String id) {
+    public Board findById(int id) {
         return boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Board with ID=%s not found.", id)));
     }
 

@@ -5,12 +5,19 @@ server:
     session:
       timeout: 20m
 spring:
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
-      database: jyra-db
-      auto-index-creation: true
+  datasource:
+    url: jdbc:h2:file:/data/demo
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialec
+  h2:
+    console:
+      enabled: true
+      path: /db
+      settings.trace: false
+      settings.web-allow-others: false
   mvc:
     hiddenmethod:
       filter:
