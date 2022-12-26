@@ -14,11 +14,14 @@ import course.spring.jyra.service.SprintService;
 import course.spring.jyra.service.TaskService;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -32,30 +35,39 @@ import java.util.Objects;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
+@Entity
+@Table
 public class SprintResult {
     @Id
-    private String id;
+    @Column
+    private Long id;
 
     @NotNull
     @NonNull
-    private String sprintId;
+    @Column
+    private Long sprintId;
 
     @Builder.Default
+    @Column
     private int teamVelocity = 0;
 
     @Size(min = 10, max = 2500, message = "String must be between 10 and 2500 characters String, supporting Markdown syntax.")
+    @Column
     private String resultsDescription;
 
     @NonNull
     @NotNull
-    private List<String> taskResultsIds = new ArrayList<>();
+    @Column
+    private List<Long> taskResultsIds = new ArrayList<>();
 
     @Builder.Default
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @Column
     private LocalDateTime created = LocalDateTime.now();
 
     @Builder.Default
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @Column
     private LocalDateTime modified = LocalDateTime.now();
 
 }

@@ -1,44 +1,57 @@
 package course.spring.jyra.model;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Document(collection = "boards")
+@Entity
+@Table
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Board {
     @Id
-    private String id;
+    @Column
+    private Long id;
 
-    private String projectId;
+    @Column
+    private Long projectId;
 
-    private String sprintId;
+    @Column
+    private Long sprintId;
 
+    @Column
     @Builder.Default
-    private List<String> toDoIds = new ArrayList<>();
+    private List<Long> toDoIds = new ArrayList<>();
 
+    @Column
     @Builder.Default
-    private List<String> inProgressIds = new ArrayList<>();
+    private List<Long> inProgressIds = new ArrayList<>();
 
+    @Column
     @Builder.Default
-    private List<String> inReviewIds = new ArrayList<>();
+    private List<Long> inReviewIds = new ArrayList<>();
 
+    @Column
     @Builder.Default
-    private List<String> doneIds = new ArrayList<>();
+    private List<Long> doneIds = new ArrayList<>();
 
+    @Column
     @Builder.Default
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime created = LocalDateTime.now();
 
+    @Column
     @Builder.Default
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime modified = LocalDateTime.now();

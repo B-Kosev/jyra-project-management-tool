@@ -11,46 +11,55 @@ modified (generated automatically) - time stamp of the moment the entity was las
  */
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-@Document(collection = "taskResults")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
+@Entity
+@Table
 public class TaskResult {
     @Id
-    private String id;
+    @Column
+    private Long id;
 
     @NotNull
     @NonNull
-    private String taskId;
+    @Column
+    private Long taskId;
 
     @NotNull
     @NonNull
+    @Column
     private int actualEffort;
 
     @NotNull
     @NonNull
-    private String verifiedById;
+    @Column
+    private Long verifiedById;
 
     @Size(min = 10, max = 2500, message = "String must be between 10 and 2500 characters String, supporting Markdown syntax.")
+    @Column
     private String resultsDescription;
 
     @Builder.Default
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @Column
     private LocalDateTime created = LocalDateTime.now();
 
     @Builder.Default
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @Column
     private LocalDateTime modified = LocalDateTime.now();
 
 }
