@@ -10,14 +10,11 @@ created (generated automatically) - time stamp of the moment the entity was crea
 modified (generated automatically) - time stamp of the moment the entity was last modified;
  */
 
-import course.spring.jyra.service.SprintService;
-import course.spring.jyra.service.TaskService;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
+import org.hibernate.Hibernate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -30,7 +27,9 @@ import java.util.List;
 import java.util.Objects;
 
 @Document(collection = "sprintResults")
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -40,12 +39,12 @@ import java.util.Objects;
 public class SprintResult {
     @Id
     @Column
-    private Long id;
+    private Integer id;
 
     @NotNull
     @NonNull
     @Column
-    private Long sprintId;
+    private Integer sprintId;
 
     @Builder.Default
     @Column
@@ -54,11 +53,6 @@ public class SprintResult {
     @Size(min = 10, max = 2500, message = "String must be between 10 and 2500 characters String, supporting Markdown syntax.")
     @Column
     private String resultsDescription;
-
-    @NonNull
-    @NotNull
-    @Column
-    private List<Long> taskResultsIds = new ArrayList<>();
 
     @Builder.Default
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -70,4 +64,16 @@ public class SprintResult {
     @Column
     private LocalDateTime modified = LocalDateTime.now();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        SprintResult that = (SprintResult) o;
+        return id != null && Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

@@ -7,15 +7,15 @@ import java.util.List;
 public interface ProjectService {
     List<Project> findAll();
 
-    Project findById(String id);
+    Project findById(Integer id);
 
     Project findByTitle(String title);
 
     Project create(Project project);
 
-    Project deleteById(String id);
+    Project deleteById(Integer id);
 
-    Project update(Project project, String oldId);
+    Project update(Project project, Integer oldId);
 
     Project update(Project project);
 

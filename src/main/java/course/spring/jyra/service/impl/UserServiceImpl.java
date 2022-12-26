@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(String id) {
+    public User findById(Integer id) {
         User found = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("User with ID=%s not found", id)));
         found.setPassword("");
@@ -76,13 +76,13 @@ public class UserServiceImpl implements UserService {
             user.setRoles(List.of(Role.DEVELOPER));
         }
 
-        User created = userRepository.insert(user);
+        User created = userRepository.save(user);
         created.setPassword("");
         return created;
     }
 
     @Override
-    public User update(User user, String oldId) {
+    public User update(User user, Integer oldId) {
         User oldUser = userRepository.findById(oldId).orElseThrow(() -> new EntityNotFoundException(String.format("User with ID='%s' not found.", oldId)));
 
         user.setId(oldUser.getId());
@@ -163,7 +163,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User deleteById(String id) {
+    public User deleteById(Integer id) {
         User oldUser = findById(id);
         userRepository.deleteById(id);
         oldUser.setPassword("");
@@ -171,7 +171,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String printProjects(String id) {
+    public String printProjects(Integer id) {
         StringBuilder stringBuilder = new StringBuilder();
         User user = findById(id);
         if (!(user instanceof ProductOwner)) {
@@ -183,7 +183,7 @@ public class UserServiceImpl implements UserService {
         return stringBuilder.substring(0, stringBuilder.lastIndexOf(","));
     }
 
-    public String printAssignedTasks(String id) {
+    public String printAssignedTasks(Integer id) {
         StringBuilder stringBuilder = new StringBuilder();
         User user = findById(id);
         if (!(user instanceof Developer)) {

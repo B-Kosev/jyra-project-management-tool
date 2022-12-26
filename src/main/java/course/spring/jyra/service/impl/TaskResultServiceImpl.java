@@ -33,7 +33,7 @@ public class TaskResultServiceImpl implements TaskResultService {
     }
 
     @Override
-    public TaskResult findById(String id) {
+    public TaskResult findById(Integer id) {
         return taskResultRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Task result with ID=%s not found.", id)));
     }
 
@@ -42,7 +42,7 @@ public class TaskResultServiceImpl implements TaskResultService {
         taskResult.setId(null);
         taskResult.setCreated(LocalDateTime.now());
         taskResult.setModified(LocalDateTime.now());
-        TaskResult updated = taskResultRepository.insert(taskResult);
+        TaskResult updated = taskResultRepository.save(taskResult);
 
         // update task references
         Task task = taskRepository.findById(taskResult.getTaskId()).orElseThrow(() -> new EntityNotFoundException(String.format("Task with ID=%s not found.", taskResult.getTaskId())));
@@ -60,7 +60,7 @@ public class TaskResultServiceImpl implements TaskResultService {
     }
 
     @Override
-    public TaskResult update(TaskResult taskResult, String oldId) {
+    public TaskResult update(TaskResult taskResult, Integer oldId) {
         TaskResult oldTaskResult = findById(oldId);
 
         taskResult.setId(oldTaskResult.getId());
@@ -80,7 +80,7 @@ public class TaskResultServiceImpl implements TaskResultService {
     }
 
     @Override
-    public TaskResult deleteById(String id) {
+    public TaskResult deleteById(Integer id) {
         TaskResult oldTaskResult = findById(id);
         taskResultRepository.deleteById(id);
 
@@ -100,7 +100,7 @@ public class TaskResultServiceImpl implements TaskResultService {
     }
 
     @Override
-    public TaskResult findByTaskId(String id) {
+    public TaskResult findByTaskId(Integer id) {
         return taskResultRepository.findAll().stream().filter(taskResult -> taskResult.getTaskId().equals(id)).findFirst()
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Task with ID=%s not found.", id)));
     }

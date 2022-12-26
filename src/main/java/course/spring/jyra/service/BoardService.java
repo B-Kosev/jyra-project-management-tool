@@ -8,13 +8,13 @@ import java.util.List;
 public interface BoardService {
     List<Board> findAll();
 
-    Board findById(String id);
+    Board findById(Integer id);
 
-    Board findByProjectId(String projectId);
+    Board findByProjectId(Integer projectId);
 
     Board create(Board board);
 
-    Board deleteById(String id);
+    Board deleteById(Integer id);
 
     Board update(Board board);
 

@@ -41,7 +41,7 @@ public class SprintServiceImpl implements SprintService {
     }
 
     @Override
-    public Sprint findById(String id) {
+    public Sprint findById(Integer id) {
         return sprintRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Sprint with ID=%s not found.", id)));
     }
 
@@ -63,7 +63,7 @@ public class SprintServiceImpl implements SprintService {
         sprint.setCreated(LocalDateTime.now());
         sprint.setModified(LocalDateTime.now());
         sprint.calculateDuration();
-        Sprint updated = sprintRepository.insert(sprint);
+        Sprint updated = sprintRepository.save(sprint);
 
         // add reference to project
         Project project = projectRepository.findById(sprint.getProjectId()).orElseThrow(() -> new EntityNotFoundException(String.format("Project with ID=%s not found.", sprint.getProjectId())));
@@ -71,7 +71,7 @@ public class SprintServiceImpl implements SprintService {
         projectRepository.save(project);
 
         // add references to tasks
-        for (String taskId : sprint.getTasksIds()) {
+        for (Integer taskId : sprint.getTasksIds()) {
             Task task = taskRepository.findById(taskId).orElseThrow(() -> new EntityNotFoundException(String.format("Task with ID=%s not found.", taskId)));
             task.setSprintId(updated.getId());
             taskRepository.save(task);
@@ -86,7 +86,7 @@ public class SprintServiceImpl implements SprintService {
     }
 
     @Override
-    public Sprint update(Sprint sprint, String oldId) {
+    public Sprint update(Sprint sprint, Integer oldId) {
         Sprint oldSprint = findById(oldId);
 
         sprint.setId(oldSprint.getId());
@@ -95,7 +95,7 @@ public class SprintServiceImpl implements SprintService {
         sprint.setCreated(oldSprint.getCreated());
         sprint.setModified(LocalDateTime.now());
 
-        for (String taskId : sprint.getTasksIds()) {
+        for (Integer taskId : sprint.getTasksIds()) {
             // add references to tasks' field sprintId
             Task task = taskRepository.findById(taskId).orElseThrow(() -> new EntityNotFoundException(String.format("Task with ID=%s not found.", taskId)));
             task.setSprintId(sprint.getId());
@@ -119,7 +119,7 @@ public class SprintServiceImpl implements SprintService {
     }
 
     @Override
-    public Sprint deleteById(String id) {
+    public Sprint deleteById(Integer id) {
         Sprint oldSprint = findById(id);
         sprintRepository.deleteById(id);
 
@@ -129,7 +129,7 @@ public class SprintServiceImpl implements SprintService {
         projectRepository.save(project);
 
         // remove sprintId field from all tasks
-        for (String taskId : oldSprint.getTasksIds()) {
+        for (Integer taskId : oldSprint.getTasksIds()) {
             Task task = taskRepository.findById(taskId).orElseThrow(() -> new EntityNotFoundException(String.format("Task with ID=%s not found.", taskId)));
             task.setSprintId(null);
             taskRepository.save(task);

@@ -46,7 +46,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project findById(String id) {
+    public Project findById(Integer id) {
         return projectRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Project with ID=%s not found.", id)));
     }
 
@@ -61,7 +61,7 @@ public class ProjectServiceImpl implements ProjectService {
         project.setCreated(LocalDateTime.now());
         project.setModified(LocalDateTime.now());
 
-        Project updated = projectRepository.insert(project);
+        Project updated = projectRepository.save(project);
 
 //        update cross-references
         ProductOwner productOwner = (ProductOwner) userRepository.findById(project.getOwnerId()).orElseThrow(() -> new EntityNotFoundException(String.format("User with ID=%s not found", project.getOwnerId())));
@@ -81,7 +81,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project update(Project project, String oldId) {
+    public Project update(Project project, Integer oldId) {
         Project oldProject = findById(oldId);
 
 //        Copy fields that are not set in the form
@@ -125,7 +125,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project deleteById(String id) {
+    public Project deleteById(Integer id) {
         Project oldProject = findById(id);
         projectRepository.deleteById(id);
 

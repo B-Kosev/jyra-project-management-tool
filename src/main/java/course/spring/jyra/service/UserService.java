@@ -7,21 +7,21 @@ import java.util.List;
 public interface UserService {
     List<User> findAll();
 
-    User findById(String id);
+    User findById(Integer id);
 
     User findByUsername(String username);
 
     User create(User user);
 
-    User deleteById(String id);
+    User deleteById(Integer id);
 
-    User update(User user, String oldId);
+    User update(User user, Integer oldId);
 
     User update(User user);
 
-    String printProjects(String id);
+    String printProjects(Integer id);
 
-    String printAssignedTasks(String id);
+    String printAssignedTasks(Integer id);
 
 //    List<User> findBySearch(String keywords);
 

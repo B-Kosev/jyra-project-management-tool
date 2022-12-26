@@ -2,6 +2,7 @@ package course.spring.jyra.model;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -14,10 +15,13 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -28,7 +32,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 public class Sprint {
     @Id
     @Column
-    private Long id;
+    private Integer id;
 
     @NonNull
     @NotNull
@@ -53,27 +57,12 @@ public class Sprint {
     @NonNull
     @NotNull
     @Column
-    private Long projectId;
+    private Integer projectId;
 
     @NonNull
     @NotNull
     @Column
-    private Long ownerId;
-
-    @Builder.Default
-    @Column
-    private List<Long> developersIds = new ArrayList<>();
-
-    @Builder.Default
-    @Column
-    private List<Long> tasksIds = new ArrayList<>();
-
-    @Builder.Default
-    @Column
-    private List<Long> completedTaskResultsIds = new ArrayList<>();
-
-    @Column
-    private Long sprintResultId;
+    private Integer ownerId;
 
     @Builder.Default
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -88,5 +77,18 @@ public class Sprint {
     public void calculateDuration() {
         this.duration = DAYS.between(this.startDate, this.endDate);
         log.info("Calculating sprint duration...");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Sprint sprint = (Sprint) o;
+        return id != null && Objects.equals(id, sprint.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

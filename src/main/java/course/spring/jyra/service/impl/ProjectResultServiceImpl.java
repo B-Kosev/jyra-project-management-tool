@@ -8,6 +8,7 @@ import course.spring.jyra.exception.ExistingEntityException;
 import course.spring.jyra.model.ProductOwner;
 import course.spring.jyra.model.Project;
 import course.spring.jyra.model.ProjectResult;
+import course.spring.jyra.model.User;
 import course.spring.jyra.service.ProjectResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,13 +38,13 @@ public class ProjectResultServiceImpl implements ProjectResultService {
     }
 
     @Override
-    public ProjectResult findById(String id) {
+    public ProjectResult findById(Integer id) {
         return projectResultRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Project result with ID=%s not found.", id)));
     }
 
     @Override
     public ProjectResult create(ProjectResult projectResult) {
-        String projectId = projectResult.getProjectId();
+        Integer projectId = projectResult.getProjectId();
         Optional<ProjectResult> projectMatch = projectResultRepository.findAll().stream().filter(projectResult1 -> projectResult1.getProjectId().equals(projectId)).findAny();
 
         if (projectMatch.isPresent()) {
@@ -62,7 +63,7 @@ public class ProjectResultServiceImpl implements ProjectResultService {
         projectResult.setModified(LocalDateTime.now());
         calculateDuration(projectResult, project);
 
-        ProjectResult updated = projectResultRepository.insert(projectResult);
+        ProjectResult updated = projectResultRepository.save(projectResult);
 
         project.setProjectResultId(updated.getId());
         projectRepository.save(project);
@@ -75,7 +76,7 @@ public class ProjectResultServiceImpl implements ProjectResultService {
     }
 
     @Override
-    public ProjectResult update(ProjectResult projectResult, String oldId) {
+    public ProjectResult update(ProjectResult projectResult, Integer oldId) {
         ProjectResult oldProjectResult = findById(oldId);
 
         projectResult.setId(oldProjectResult.getId());
@@ -95,7 +96,7 @@ public class ProjectResultServiceImpl implements ProjectResultService {
     }
 
     @Override
-    public ProjectResult deleteById(String id) {
+    public ProjectResult deleteById(Integer id) {
         ProjectResult oldProjectResult = findById(id);
         projectResultRepository.deleteById(id);
 
@@ -103,7 +104,7 @@ public class ProjectResultServiceImpl implements ProjectResultService {
         project.setProjectResultId(null);
         projectRepository.save(project);
 
-        ProductOwner po = (ProductOwner) userRepository.findById(project.getOwnerId()).orElseThrow(() -> new EntityNotFoundException(String.format("User with ID=%s not found.", (project.getOwnerId()))));
+        User po = userRepository.findById(project.getOwnerId()).orElseThrow(() -> new EntityNotFoundException(String.format("User with ID=%s not found.", (project.getOwnerId()))));
         po.getCompletedProjectResultsIds().remove(oldProjectResult.getId());
         userRepository.save(po);
 
@@ -111,7 +112,7 @@ public class ProjectResultServiceImpl implements ProjectResultService {
     }
 
     @Override
-    public ProjectResult findByProject(String id) {
+    public ProjectResult findByProject(Integer id) {
         return projectResultRepository.findAll().stream().filter(projectResult -> projectResult.getProjectId().equals(id)).findFirst().orElseThrow(() -> new EntityNotFoundException(String.format("Project with ID=%s not found.", id)));
     }
 

@@ -7,17 +7,17 @@ import java.util.List;
 public interface SprintResultService {
     List<SprintResult> findAll();
 
-    SprintResult findById(String id);
+    SprintResult findById(Integer id);
 
     SprintResult create(SprintResult sprintResult);
 
-    SprintResult update(SprintResult sprintResult, String oldId);
+    SprintResult update(SprintResult sprintResult, Integer oldId);
 
     SprintResult update(SprintResult sprintResult);
 
-    SprintResult deleteById(String id);
+    SprintResult deleteById(Integer id);
 
-    SprintResult findBySprintId(String id);
+    SprintResult findBySprintId(Integer id);
 
     long count();
 }

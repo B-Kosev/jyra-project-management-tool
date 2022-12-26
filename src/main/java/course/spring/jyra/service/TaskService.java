@@ -7,21 +7,21 @@ import java.util.List;
 public interface TaskService {
     List<Task> findAll();
 
-    Task findById(String id);
+    Task findById(Integer id);
 
     Task findByTitle(String title);
 
     Task create(Task task);
 
-    Task create(Task task, String projectId);
+    Task create(Task task, Integer projectId);
 
-    Task update(Task task, String oldId, String projectId);
+    Task update(Task task, Integer oldId, Integer projectId);
 
     Task update(Task task);
 
-    Task deleteById(String id);
+    Task deleteById(Integer id);
 
-    Task deleteById(String id, String projectId);
+    Task deleteById(Integer id, Integer projectId);
 
     List<Task> findBySearch(String keywords);
 

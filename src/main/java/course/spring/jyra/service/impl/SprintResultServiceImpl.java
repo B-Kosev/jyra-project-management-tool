@@ -37,7 +37,7 @@ public class SprintResultServiceImpl implements SprintResultService {
     }
 
     @Override
-    public SprintResult findById(String id) {
+    public SprintResult findById(Integer id) {
         return sprintResultRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Sprint result with ID=%s not found.", id)));
     }
 
@@ -48,7 +48,7 @@ public class SprintResultServiceImpl implements SprintResultService {
         sprintResult.setModified(LocalDateTime.now());
         sprintResult.setTeamVelocity(calculateTeamVelocity(sprintResult));
 
-        SprintResult updated = sprintResultRepository.insert(sprintResult);
+        SprintResult updated = sprintResultRepository.save(sprintResult);
 
         // add references to sprint
         Sprint sprint = sprintRepository.findById(sprintResult.getSprintId()).orElseThrow(() -> new EntityNotFoundException(String.format("Sprint with ID=%s not found.", sprintResult.getSprintId())));
@@ -66,7 +66,7 @@ public class SprintResultServiceImpl implements SprintResultService {
     }
 
     @Override
-    public SprintResult update(SprintResult sprintResult, String oldId) {
+    public SprintResult update(SprintResult sprintResult, Integer oldId) {
         SprintResult oldSprintResult = findById(oldId);
 
         sprintResult.setId(oldSprintResult.getId());
@@ -89,7 +89,7 @@ public class SprintResultServiceImpl implements SprintResultService {
     }
 
     @Override
-    public SprintResult deleteById(String id) {
+    public SprintResult deleteById(Integer id) {
         SprintResult oldSprintResult = findById(id);
         sprintResultRepository.deleteById(id);
 
@@ -107,7 +107,7 @@ public class SprintResultServiceImpl implements SprintResultService {
     }
 
     @Override
-    public SprintResult findBySprintId(String id) {
+    public SprintResult findBySprintId(Integer id) {
         return sprintResultRepository.findAll().stream().filter(sprintResult -> sprintResult.getSprintId().equals(id)).findFirst()
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Sprint with ID=%s not found.", id)));
     }

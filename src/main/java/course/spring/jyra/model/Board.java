@@ -1,50 +1,37 @@
 package course.spring.jyra.model;
 
 import lombok.*;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.hibernate.Hibernate;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Board {
     @Id
     @Column
-    private Long id;
+    private Integer id;
 
     @Column
-    private Long projectId;
+    private Integer projectId;
 
     @Column
-    private Long sprintId;
-
-    @Column
-    @Builder.Default
-    private List<Long> toDoIds = new ArrayList<>();
-
-    @Column
-    @Builder.Default
-    private List<Long> inProgressIds = new ArrayList<>();
-
-    @Column
-    @Builder.Default
-    private List<Long> inReviewIds = new ArrayList<>();
-
-    @Column
-    @Builder.Default
-    private List<Long> doneIds = new ArrayList<>();
+    private Integer sprintId;
 
     @Column
     @Builder.Default
@@ -55,4 +42,17 @@ public class Board {
     @Builder.Default
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime modified = LocalDateTime.now();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Board board = (Board) o;
+        return id != null && Objects.equals(id, board.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

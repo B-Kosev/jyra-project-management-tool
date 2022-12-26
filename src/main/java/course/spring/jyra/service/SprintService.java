@@ -8,15 +8,15 @@ import java.util.List;
 public interface SprintService {
     List<Sprint> findAll();
 
-    Sprint findById(String id);
+    Sprint findById(Integer id);
 
     Sprint findByTitle(String title);
 
     Sprint create(Sprint sprint);
 
-    Sprint deleteById(String id);
+    Sprint deleteById(Integer id);
 
-    Sprint update(Sprint sprint, String oldId);
+    Sprint update(Sprint sprint, Integer oldId);
 
     Sprint update(Sprint sprint);
 

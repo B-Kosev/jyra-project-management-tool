@@ -43,7 +43,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task findById(String id) {
+    public Task findById(Integer id) {
         return taskRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Task with ID=%s not found.", id)));
     }
 
@@ -65,11 +65,11 @@ public class TaskServiceImpl implements TaskService {
         task.setCreated(LocalDateTime.now());
         task.setModified(LocalDateTime.now());
 
-        return taskRepository.insert(task);
+        return taskRepository.save(task);
     }
 
     @Override
-    public Task create(Task task, String projectId) {
+    public Task create(Task task, Integer projectId) {
         task.setId(null);
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -81,9 +81,9 @@ public class TaskServiceImpl implements TaskService {
         task.setCreated(LocalDateTime.now());
         task.setModified(LocalDateTime.now());
 
-        Task updated = taskRepository.insert(task);
+        Task updated = taskRepository.save(task);
 
-        for (String devId : task.getDevelopersAssignedIds()) {
+        for (Integer devId : task.getDevelopersAssignedIds()) {
             Developer dev = (Developer) userRepository.findById(devId).orElseThrow(() -> new EntityNotFoundException(String.format("User with ID=%s not found.", devId)));
             dev.getAssignedTasksIds().add(task.getId());
             userRepository.save(dev);
@@ -122,7 +122,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task update(Task task, String oldId, String projectId) {
+    public Task update(Task task, Integer oldId, Integer projectId) {
         Task oldTask = findById(oldId);
 
         task.setId(oldTask.getId());
@@ -141,7 +141,7 @@ public class TaskServiceImpl implements TaskService {
             return taskRepository.save(task);
         } else {
             // check if the updated task has additional devs, if so add the task to them
-            for (String devId : task.getDevelopersAssignedIds()) {
+            for (Integer devId : task.getDevelopersAssignedIds()) {
                 Developer dev = (Developer) userRepository.findById(devId).orElseThrow(() -> new EntityNotFoundException(String.format("User with ID=%s not found.", devId)));
                 if (!oldTask.getDevelopersAssignedIds().contains(dev.getId())) {
                     dev.getAssignedTasksIds().add(task.getId());
@@ -230,19 +230,19 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task deleteById(String id) {
+    public Task deleteById(Integer id) {
         Task oldTask = findById(id);
         taskRepository.deleteById(id);
         return oldTask;
     }
 
     @Override
-    public Task deleteById(String id, String projectId) {
+    public Task deleteById(Integer id, Integer projectId) {
         Task oldTask = findById(id);
         taskRepository.deleteById(id);
 
         // delete users' references to the task
-        for (String devId : oldTask.getDevelopersAssignedIds()) {
+        for (Integer devId : oldTask.getDevelopersAssignedIds()) {
             Developer dev = (Developer) userRepository.findById(devId).orElseThrow(() -> new EntityNotFoundException(String.format("User with ID=%s not found.", devId)));
             dev.getAssignedTasksIds().remove(oldTask.getId());
             userRepository.save(dev);

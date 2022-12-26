@@ -2,7 +2,7 @@ package course.spring.jyra.model;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
+import org.hibernate.Hibernate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,10 +18,15 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
@@ -30,7 +35,7 @@ import java.util.stream.Collectors;
 public class User implements UserDetails {
     @Id
     @Column
-    private Long id;
+    private Integer id;
 
     @NonNull
     @NotNull
@@ -70,7 +75,7 @@ public class User implements UserDetails {
     @NotEmpty
     @Builder.Default
     @Column
-    private List<Role> roles = List.of(Role.DEVELOPER);
+    private Role role = Role.DEVELOPER;
 
     @Size(min = 10, max = 250, message = "Contacts must be between 10 and 250 characters long.")
     @Column
@@ -100,7 +105,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(role -> "ROLE_" + role).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_" + role));
     }
 
     @Override
@@ -124,8 +129,19 @@ public class User implements UserDetails {
     }
 
     public String printRoles() {
-        StringBuilder stringBuilder = new StringBuilder();
-        roles.forEach(role -> stringBuilder.append(String.format("%s, ", role.getReadable())));
-        return stringBuilder.substring(0, stringBuilder.lastIndexOf(","));
+        return role.getReadable();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
+        return id != null && Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

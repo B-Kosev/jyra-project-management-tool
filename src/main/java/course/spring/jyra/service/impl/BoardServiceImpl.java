@@ -21,16 +21,16 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public List<Board> findAll() {
-        return (List<Board>) boardRepository.findAll();
+        return boardRepository.findAll();
     }
 
     @Override
-    public Board findById(int id) {
+    public Board findById(Integer id) {
         return boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Board with ID=%s not found.", id)));
     }
 
     @Override
-    public Board findByProjectId(String projectId) {
+    public Board findByProjectId(Integer projectId) {
         return boardRepository.findAll().stream().filter(board -> board.getProjectId().equals(projectId)).findFirst().orElseThrow(() -> new EntityNotFoundException(String.format("Board with project ID=%s not found.", projectId)));
     }
 
@@ -39,11 +39,11 @@ public class BoardServiceImpl implements BoardService {
         board.setId(null);
         board.setCreated(LocalDateTime.now());
         board.setModified(LocalDateTime.now());
-        return boardRepository.insert(board);
+        return boardRepository.save(board);
     }
 
     @Override
-    public Board deleteById(String id) {
+    public Board deleteById(Integer id) {
         Board oldBoard = findById(id);
         boardRepository.deleteById(id);
         return oldBoard;

@@ -15,7 +15,7 @@ modified (generated automatically) - time stamp of the moment the entity was las
  */
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
+import org.hibernate.Hibernate;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -27,9 +27,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -39,7 +42,7 @@ import java.util.List;
 public class Task {
     @Id
     @Column
-    private Long id;
+    private Integer id;
 
     @NotNull
     @NonNull
@@ -56,7 +59,7 @@ public class Task {
     @NotNull
     @NonNull
     @Column
-    private Long addedById;
+    private Integer addedById;
 
     @NotNull
     @NonNull
@@ -70,12 +73,12 @@ public class Task {
     private TaskStatus status = TaskStatus.TO_DO;
 
     @Column
-    private Long sprintId;
+    private Integer sprintId;
 
     @NotNull
     @NonNull
     @Column
-    private List<Long> developersAssignedIds;
+    private Integer projectId;
 
     @Column
     @Size(min = 150, max = 2500, message = "String must be between 150 and 2500 characters String, supporting Markdown syntax")
@@ -87,9 +90,6 @@ public class Task {
     @Column
     private String tags;
 
-    @Column
-    private Long taskResultId;
-
     @Builder.Default
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Column
@@ -99,4 +99,17 @@ public class Task {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Column
     private LocalDateTime modified = LocalDateTime.now();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Task task = (Task) o;
+        return id != null && Objects.equals(id, task.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

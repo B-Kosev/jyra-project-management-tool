@@ -7,17 +7,17 @@ import java.util.List;
 public interface ProjectResultService {
     List<ProjectResult> findAll();
 
-    ProjectResult findById(String id);
+    ProjectResult findById(Integer id);
 
     ProjectResult create(ProjectResult projectResult);
 
-    ProjectResult update(ProjectResult projectResult, String oldId);
+    ProjectResult update(ProjectResult projectResult, Integer oldId);
 
     ProjectResult update(ProjectResult projectResult);
 
-    ProjectResult deleteById(String id);
+    ProjectResult deleteById(Integer id);
 
-    ProjectResult findByProject(String id);
+    ProjectResult findByProject(Integer id);
 
     long count();
 }

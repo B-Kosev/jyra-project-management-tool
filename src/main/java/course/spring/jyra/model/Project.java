@@ -1,7 +1,7 @@
 package course.spring.jyra.model;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
+import org.hibernate.Hibernate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
@@ -13,8 +13,11 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ import java.util.List;
 public class Project {
     @Id
     @Column
-    private Long id;
+    private Integer id;
 
     @NonNull
     @NotNull
@@ -46,29 +49,13 @@ public class Project {
     @NonNull
     @NotNull
     @Column
-    private Long ownerId;
-
-    @NonNull
-    @NotNull
-    @Column
-    private List<Long> developersIds = new ArrayList<>();
+    private Integer ownerId;
 
     @Column
-    private Long currentSprintId;
-
-    @Builder.Default
-    @Column
-    private List<Long> previousSprintResultsIds = new ArrayList<>();
-
-    @Builder.Default
-    @Column
-    private List<Long> tasksBacklogIds = new ArrayList<>();
+    private Integer currentSprintId;
 
     @Column
     private String tags;
-
-    @Column
-    private Long projectResultId;
 
     @Builder.Default
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -78,4 +65,17 @@ public class Project {
     @Builder.Default
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime modified = LocalDateTime.now();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Project project = (Project) o;
+        return id != null && Objects.equals(id, project.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
