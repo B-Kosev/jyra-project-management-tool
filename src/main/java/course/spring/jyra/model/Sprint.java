@@ -53,27 +53,27 @@ public class Sprint {
     @NonNull
     @NotNull
     @Column
-    private String projectId;
+    private Long projectId;
 
     @NonNull
     @NotNull
     @Column
-    private String ownerId;
+    private Long ownerId;
 
     @Builder.Default
     @Column
-    private List<String> developersIds = new ArrayList<>();
+    private List<Long> developersIds = new ArrayList<>();
 
     @Builder.Default
     @Column
-    private List<String> tasksIds = new ArrayList<>();
+    private List<Long> tasksIds = new ArrayList<>();
 
     @Builder.Default
     @Column
-    private List<String> completedTaskResultsIds = new ArrayList<>();
+    private List<Long> completedTaskResultsIds = new ArrayList<>();
 
     @Column
-    private String sprintResultId;
+    private Long sprintResultId;
 
     @Builder.Default
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

@@ -40,7 +40,7 @@ public class ProjectResult {
     @NonNull
     @NotNull
     @Column
-    private String projectId;
+    private Long projectId;
 
     @NonNull
     @NotNull
@@ -61,7 +61,7 @@ public class ProjectResult {
     @NonNull
     @NotNull
     @Column
-    private List<String> sprintResultListIds = new ArrayList<>();
+        private List<Long> sprintResultListIds = new ArrayList<>();
 
     @Builder.Default
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

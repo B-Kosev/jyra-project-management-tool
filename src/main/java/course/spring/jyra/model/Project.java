@@ -46,29 +46,29 @@ public class Project {
     @NonNull
     @NotNull
     @Column
-    private String ownerId;
+    private Long ownerId;
 
     @NonNull
     @NotNull
     @Column
-    private List<String> developersIds = new ArrayList<>();
+    private List<Long> developersIds = new ArrayList<>();
 
     @Column
-    private String currentSprintId;
-
-    @Builder.Default
-    @Column
-    private List<String> previousSprintResultsIds = new ArrayList<>();
+    private Long currentSprintId;
 
     @Builder.Default
     @Column
-    private List<String> tasksBacklogIds = new ArrayList<>();
+    private List<Long> previousSprintResultsIds = new ArrayList<>();
+
+    @Builder.Default
+    @Column
+    private List<Long> tasksBacklogIds = new ArrayList<>();
 
     @Column
     private String tags;
 
     @Column
-    private String projectResultId;
+    private Long projectResultId;
 
     @Builder.Default
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
