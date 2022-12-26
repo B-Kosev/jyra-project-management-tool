@@ -15,15 +15,7 @@ public interface UserService {
 
     User deleteById(Integer id);
 
-    User update(User user, Integer oldId);
-
     User update(User user);
-
-    String printProjects(Integer id);
-
-    String printAssignedTasks(Integer id);
-
-//    List<User> findBySearch(String keywords);
 
     long count();
 }

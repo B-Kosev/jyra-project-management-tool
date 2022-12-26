@@ -2,10 +2,6 @@ package course.spring.jyra.web;
 
 import javax.servlet.http.HttpSession;
 
-import course.spring.jyra.exception.InvalidEntityException;
-import course.spring.jyra.model.Developer;
-import course.spring.jyra.model.ProductOwner;
-import course.spring.jyra.model.Role;
 import course.spring.jyra.model.User;
 import course.spring.jyra.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;

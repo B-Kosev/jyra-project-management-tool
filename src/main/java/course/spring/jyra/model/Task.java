@@ -14,18 +14,17 @@ created (generated automatically) - time stamp of the moment the entity was crea
 modified (generated automatically) - time stamp of the moment the entity was last modified;
  */
 
-import lombok.*;
-import org.hibernate.Hibernate;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.thymeleaf.spring5.SpringTemplateEngine;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
 
+import org.hibernate.Hibernate;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import lombok.*;
 
 @Getter
 @Setter
@@ -37,82 +36,83 @@ import java.util.Objects;
 @Entity
 @Table
 public class Task {
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@Column
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    @NotNull
-    @NonNull
-    @Column
-    private TaskType taskType;
+	@NotNull
+	@NonNull
+	@Column
+	private TaskType taskType;
 
-    @NotNull
-    @NonNull
-    @Size(min = 2, max = 120, message = "String must be between 2 and 120 characters String")
-    @Column
-    private String title;
+	@NotNull
+	@NonNull
+	@Size(min = 2, max = 120, message = "String must be between 2 and 120 characters String")
+	@Column
+	private String title;
 
-    @NotNull
-    @NonNull
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "addedBy_id", referencedColumnName = "id")
-    private User addedBy;
+	@NotNull
+	@NonNull
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "addedBy_id", referencedColumnName = "id")
+	private User addedBy;
 
-    @NotNull
-    @NonNull
-    @Column
-    private int estimatedEffort;
+	@NotNull
+	@NonNull
+	@Column
+	private int estimatedEffort;
 
-    @NotNull
-    @NonNull
-    @Builder.Default
-    @Column
-    private TaskStatus status = TaskStatus.TO_DO;
+	@NotNull
+	@NonNull
+	@Builder.Default
+	@Column
+	private TaskStatus status = TaskStatus.TO_DO;
 
-    @Column
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "sprint_id", referencedColumnName = "id")
-    private Sprint sprint;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "sprint_id", referencedColumnName = "id")
+	private Sprint sprint;
 
-    @NotNull
-    @NonNull
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "project_id", referencedColumnName = "id")
-    private Project project;
+	@NotNull
+	@NonNull
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "project_id", referencedColumnName = "id")
+	private Project project;
 
-    @OneToOne(mappedBy = "task")
-    private TaskResult taskResult;
+	@OneToOne(mappedBy = "task")
+	private TaskResult taskResult;
 
-    @Column
-    @Size(min = 150, max = 2500, message = "String must be between 150 and 2500 characters String, supporting Markdown syntax")
-    private String description;
+	@Column
+	@Size(min = 150, max = 2500, message = "String must be between 150 and 2500 characters String, supporting Markdown syntax")
+	private String description;
 
-    @NotNull
-    @NonNull
-    @Column
-    private String tags;
+	@NotNull
+	@NonNull
+	@Column
+	private String tags;
 
-    @Builder.Default
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @Column
-    private LocalDateTime created = LocalDateTime.now();
+	@Builder.Default
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	@Column
+	private LocalDateTime created = LocalDateTime.now();
 
-    @Builder.Default
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @Column
-    private LocalDateTime modified = LocalDateTime.now();
+	@Builder.Default
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	@Column
+	private LocalDateTime modified = LocalDateTime.now();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Task task = (Task) o;
-        return id != null && Objects.equals(id, task.id);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
+			return false;
+		Task task = (Task) o;
+		return id != null && Objects.equals(id, task.id);
+	}
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return getClass().hashCode();
+	}
 }

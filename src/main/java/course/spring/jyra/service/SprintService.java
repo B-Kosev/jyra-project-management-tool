@@ -16,11 +16,7 @@ public interface SprintService {
 
     Sprint deleteById(Integer id);
 
-    Sprint update(Sprint sprint, Integer oldId);
-
     Sprint update(Sprint sprint);
-
-    List<Sprint> findBySearch(String keywords);
 
     long count();
 }

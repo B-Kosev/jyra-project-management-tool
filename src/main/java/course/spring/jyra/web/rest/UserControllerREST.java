@@ -29,7 +29,7 @@ public class UserControllerREST {
     }
 
     @GetMapping("/{userId}")
-    public User getUserById(@PathVariable String userId) {
+    public User getUserById(@PathVariable Integer userId) {
         return userService.findById(userId);
     }
 
@@ -42,14 +42,14 @@ public class UserControllerREST {
     }
 
     @PutMapping("/{userId}")
-    public User updateUser(@PathVariable String userId, @RequestBody User user) {
+    public User updateUser(@PathVariable Integer userId, @RequestBody User user) {
         if (!userId.equals(user.getId()))
             throw new InvalidClientDataException(String.format("User ID %s from URL doesn't match ID %s in Request body", userId, user.getId()));
         return userService.update(user);
     }
 
     @DeleteMapping("/{userId}")
-    public User deleteUser(@PathVariable String userId) {
+    public User deleteUser(@PathVariable Integer userId) {
         return userService.deleteById(userId);
     }
 

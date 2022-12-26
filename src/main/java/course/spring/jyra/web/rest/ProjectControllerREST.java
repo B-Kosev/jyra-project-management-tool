@@ -42,7 +42,7 @@ public class ProjectControllerREST {
     }
 
     @GetMapping("/{projectId}")
-    public Project getProjectById(@PathVariable String projectId) {
+    public Project getProjectById(@PathVariable Integer projectId) {
         return projectService.findById(projectId);
     }
 
@@ -55,40 +55,14 @@ public class ProjectControllerREST {
     }
 
     @PutMapping("/{projectId}")
-    public Project updateProject(@PathVariable String projectId, @RequestBody Project project) {
+    public Project updateProject(@PathVariable Integer projectId, @RequestBody Project project) {
         if (!projectId.equals(project.getId()))
             throw new InvalidClientDataException(String.format("Project ID %s from URL doesn't match ID %s in Request body", projectId, project.getId()));
         return projectService.update(project);
     }
 
     @DeleteMapping("/{projectId}")
-    public Project deleteProject(@PathVariable String projectId) {
-        Project project = projectService.findById(projectId);
-
-        // prepare the project for deletion
-        if (project.getProjectResultId() != null) {
-            projectResultService.deleteById(project.getProjectResultId());
-        }
-
-        if (project.getCurrentSprintId() != null) {
-            sprintService.deleteById(project.getCurrentSprintId());
-            Board board = boardService.findAll().stream().filter(b -> b.getSprintId().equals(project.getCurrentSprintId())).findFirst().orElseThrow(() -> new EntityNotFoundException(String.format("Board for sprint with ID=%s not found.", project.getCurrentSprintId())));
-            boardService.deleteById(board.getId());
-        }
-
-        for (String sprintResultId : project.getPreviousSprintResultsIds()) {
-            String sprintId = sprintResultService.findById(sprintResultId).getSprintId();
-            sprintResultService.deleteById(sprintResultId);
-            sprintService.deleteById(sprintId);
-        }
-
-        for (String taskId : project.getTasksBacklogIds()) {
-            if (taskService.findById(taskId).getTaskResultId() != null) {
-                taskResultService.deleteById(taskService.findById(taskId).getTaskResultId());
-            }
-            taskService.deleteById(taskId);
-        }
-
+    public Project deleteProject(@PathVariable Integer projectId) {
         return projectService.deleteById(projectId);
     }
 

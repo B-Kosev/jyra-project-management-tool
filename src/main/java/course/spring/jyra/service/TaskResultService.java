@@ -11,8 +11,6 @@ public interface TaskResultService {
 
     TaskResult create(TaskResult taskResult);
 
-    TaskResult update(TaskResult taskResult, Integer oldId);
-
     TaskResult update(TaskResult taskResult);
 
     TaskResult deleteById(Integer id);

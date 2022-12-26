@@ -34,13 +34,13 @@ public class SprintControllerREST {
     }
 
     @GetMapping("/{sprintId}")
-    public Sprint getSprintById(@PathVariable String sprintId) {
+    public Sprint getSprintById(@PathVariable Integer sprintId) {
         return sprintService.findById(sprintId);
     }
 
     @PostMapping
     public ResponseEntity<Sprint> addSprint(@RequestBody Sprint sprint) {
-        Board board = Board.builder().projectId(sprint.getProjectId()).build();
+        Board board = Board.builder().project(sprint.getProject()).build();
         boardService.create(board);
         Sprint created = sprintService.create(sprint);
         return ResponseEntity.created(
@@ -49,19 +49,14 @@ public class SprintControllerREST {
     }
 
     @PutMapping("/{sprintId}")
-    public Sprint updateSprint(@PathVariable String sprintId, @RequestBody Sprint sprint) {
+    public Sprint updateSprint(@PathVariable Integer sprintId, @RequestBody Sprint sprint) {
         if (!sprintId.equals(sprint.getId()))
             throw new InvalidClientDataException(String.format("Sprint ID %s from URL doesn't match ID %s in Request body", sprintId, sprint.getId()));
         return sprintService.update(sprint);
     }
 
     @DeleteMapping("/{sprintId}")
-    public Sprint deleteSprint(@PathVariable String sprintId) {
-        Sprint sprint = sprintService.findById(sprintId);
-
-        Board board = boardService.findAll().stream().filter(b -> b.getProjectId().equals(sprint.getProjectId())).findFirst().orElseThrow(() -> new EntityNotFoundException(String.format("Board for project with ID=%s not found.", sprint.getProjectId())));
-        boardService.deleteById(board.getId());
-
+    public Sprint deleteSprint(@PathVariable Integer sprintId) {
         return sprintService.deleteById(sprintId);
     }
 

@@ -15,11 +15,7 @@ public interface ProjectService {
 
     Project deleteById(Integer id);
 
-    Project update(Project project, Integer oldId);
-
     Project update(Project project);
-
-    List<Project> findBySearch(String keywords);
 
     long count();
 

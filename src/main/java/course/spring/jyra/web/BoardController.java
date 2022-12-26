@@ -34,7 +34,7 @@ public class BoardController {
     }
 
     @DeleteMapping
-    public String deleteBoard(@RequestParam("delete") String id) {
+    public String deleteBoard(@RequestParam("delete") Integer id) {
         Board board = boardService.findById(id);
         log.debug("DELETE: Board: {}", board);
         boardService.deleteById(id);
@@ -42,14 +42,14 @@ public class BoardController {
     }
 
     @GetMapping("/{boardId}")
-    public String getBoardById(Model model, @PathVariable("boardId") String id) {
+    public String getBoardById(Model model, @PathVariable("boardId") Integer id) {
         model.addAttribute("board", boardService.findById(id));
         log.debug("GET: Board with Id=%s : {}", id, boardService.findById(id));
         return "single-board";
     }
 
     @PutMapping
-    public String updateBoard(@RequestParam("update") String id) {
+    public String updateBoard(@RequestParam("update") Integer id) {
         Board board = boardService.findById(id);
         log.debug("UPDATE: Board: {}", board);
         boardService.update(board);

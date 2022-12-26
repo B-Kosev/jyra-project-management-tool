@@ -31,7 +31,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Board findByProjectId(Integer projectId) {
-        return boardRepository.findAll().stream().filter(board -> board.getProjectId().equals(projectId)).findFirst().orElseThrow(() -> new EntityNotFoundException(String.format("Board with project ID=%s not found.", projectId)));
+        return boardRepository.findAll().stream().filter(board -> board.getProject().getId().equals(projectId)).findFirst().orElseThrow(() -> new EntityNotFoundException(String.format("Board with project ID=%s not found.", projectId)));
     }
 
     @Override

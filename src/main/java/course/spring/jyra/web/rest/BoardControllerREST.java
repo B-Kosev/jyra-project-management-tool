@@ -29,7 +29,7 @@ public class BoardControllerREST {
     }
 
     @GetMapping("/{boardId}")
-    public Board getBoardById(@PathVariable String boardId) {
+    public Board getBoardById(@PathVariable Integer boardId) {
         return boardService.findById(boardId);
     }
 
@@ -49,7 +49,7 @@ public class BoardControllerREST {
     }
 
     @DeleteMapping("/{boardId}")
-    public Board deleteBoard(@PathVariable String boardId) {
+    public Board deleteBoard(@PathVariable Integer boardId) {
         return boardService.deleteById(boardId);
     }
 

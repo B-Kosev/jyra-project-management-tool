@@ -13,17 +13,11 @@ public interface TaskService {
 
     Task create(Task task);
 
-    Task create(Task task, Integer projectId);
-
-    Task update(Task task, Integer oldId, Integer projectId);
-
     Task update(Task task);
 
     Task deleteById(Integer id);
 
     Task deleteById(Integer id, Integer projectId);
-
-    List<Task> findBySearch(String keywords);
 
     long count();
 }

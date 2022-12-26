@@ -32,30 +32,30 @@ public class ProjectResultControllerREST {
     }
 
     @GetMapping("/{projectId}/project-result")
-    public ProjectResult getResultByProjectId(@PathVariable String projectId) {
+    public ProjectResult getResultByProjectId(@PathVariable Integer projectId) {
         return projectResultService.findByProject(projectId);
     }
 
     @PostMapping("/{projectId}/project-result")
-    public ResponseEntity<ProjectResult> addProjectResult(@PathVariable String projectId, @RequestBody ProjectResult projectResult) {
-        if (!projectId.equals(projectResult.getProjectId()))
-            throw new InvalidClientDataException(String.format("Project ID %s from URL doesn't match ID %s in Request body", projectId, projectResult.getProjectId()));
+    public ResponseEntity<ProjectResult> addProjectResult(@PathVariable Integer projectId, @RequestBody ProjectResult projectResult) {
+        if (!projectId.equals(projectResult.getProject().getId()))
+            throw new InvalidClientDataException(String.format("Project ID %s from URL doesn't match ID %s in Request body", projectId, projectResult.getProject().getId()));
         ProjectResult created = projectResultService.create(projectResult);
         return ResponseEntity.created(
                 ServletUriComponentsBuilder.fromCurrentRequest()
-                        .pathSegment("{projectId}").buildAndExpand(created.getProjectId()).toUri()).body(created);
+                        .pathSegment("{projectId}").buildAndExpand(created.getProject().getId()).toUri()).body(created);
     }
 
     @PutMapping("/{projectId}/project-result")
-    public ProjectResult updateProjectResult(@PathVariable String projectId, @RequestBody ProjectResult projectResult) {
-        if (!projectId.equals(projectResult.getProjectId()))
-            throw new InvalidClientDataException(String.format("Project ID %s from URL doesn't match ID %s in Request body", projectId, projectResult.getProjectId()));
+    public ProjectResult updateProjectResult(@PathVariable Integer projectId, @RequestBody ProjectResult projectResult) {
+        if (!projectId.equals(projectResult.getProject().getId()))
+            throw new InvalidClientDataException(String.format("Project ID %s from URL doesn't match ID %s in Request body", projectId, projectResult.getProject().getId()));
         return projectResultService.update(projectResult);
     }
 
     @DeleteMapping("/{projectId}/project-result")
-    public ProjectResult deleteProjectResult(@PathVariable String projectId) {
-        String deletedId = projectService.findById(projectId).getProjectResultId();
+    public ProjectResult deleteProjectResult(@PathVariable Integer projectId) {
+        Integer deletedId = projectService.findById(projectId).getProjectResult().getId();
         return projectResultService.deleteById(deletedId);
     }
 
