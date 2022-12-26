@@ -16,13 +16,10 @@ modified (generated automatically) - time stamp of the moment the entity was las
 
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -42,6 +39,7 @@ import java.util.Objects;
 public class Task {
     @Id
     @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NotNull
@@ -51,15 +49,15 @@ public class Task {
 
     @NotNull
     @NonNull
-    @TextIndexed
     @Size(min = 2, max = 120, message = "String must be between 2 and 120 characters String")
     @Column
     private String title;
 
     @NotNull
     @NonNull
-    @Column
-    private Integer addedById;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "addedBy_id", referencedColumnName = "id")
+    private User addedBy;
 
     @NotNull
     @NonNull
@@ -73,12 +71,18 @@ public class Task {
     private TaskStatus status = TaskStatus.TO_DO;
 
     @Column
-    private Integer sprintId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "sprint_id", referencedColumnName = "id")
+    private Sprint sprint;
 
     @NotNull
     @NonNull
-    @Column
-    private Integer projectId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "project_id", referencedColumnName = "id")
+    private Project project;
+
+    @OneToOne(mappedBy = "task")
+    private TaskResult taskResult;
 
     @Column
     @Size(min = 150, max = 2500, message = "String must be between 150 and 2500 characters String, supporting Markdown syntax")
@@ -86,7 +90,6 @@ public class Task {
 
     @NotNull
     @NonNull
-    @TextIndexed
     @Column
     private String tags;
 

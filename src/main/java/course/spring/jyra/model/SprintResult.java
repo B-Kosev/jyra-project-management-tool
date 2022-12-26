@@ -12,13 +12,9 @@ modified (generated automatically) - time stamp of the moment the entity was las
 
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -26,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Document(collection = "sprintResults")
 @Getter
 @Setter
 @ToString
@@ -39,12 +34,13 @@ import java.util.Objects;
 public class SprintResult {
     @Id
     @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NotNull
     @NonNull
-    @Column
-    private Integer sprintId;
+    @OneToOne(mappedBy = "result")
+    private Sprint sprint;
 
     @Builder.Default
     @Column

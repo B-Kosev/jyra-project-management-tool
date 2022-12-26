@@ -4,10 +4,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +22,16 @@ import java.util.Objects;
 public class Board {
     @Id
     @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
-    private Integer projectId;
+    @OneToOne (cascade = CascadeType.ALL)
+    @JoinColumn(name = "project_id", referencedColumnName = "id")
+    private Project project;
 
-    @Column
-    private Integer sprintId;
+    @OneToOne (cascade = CascadeType.ALL)
+    @JoinColumn(name = "sprint_id", referencedColumnName = "id")
+    private Sprint sprint;
 
     @Column
     @Builder.Default

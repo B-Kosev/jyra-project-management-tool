@@ -4,14 +4,12 @@ import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,6 +25,7 @@ import java.util.Objects;
 public class Project {
     @Id
     @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NonNull
@@ -49,10 +48,23 @@ public class Project {
     @NonNull
     @NotNull
     @Column
-    private Integer ownerId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User owner;
 
-    @Column
-    private Integer currentSprintId;
+
+    @OneToOne(mappedBy = "project")
+    private Board board;
+
+    @OneToOne
+    @JoinColumn(name = "sprint_id" , referencedColumnName = "id")
+    private Sprint sprint;
+
+    @OneToOne(mappedBy = "project")
+    private ProjectResult projectResult;
+
+    @OneToMany(mappedBy = "project")
+    private HashSet<Task> tasks = new HashSet<>();
 
     @Column
     private String tags;

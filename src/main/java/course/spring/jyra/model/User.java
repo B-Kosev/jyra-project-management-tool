@@ -1,5 +1,6 @@
 package course.spring.jyra.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.Hibernate;
@@ -8,19 +9,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -35,19 +30,18 @@ import java.util.stream.Collectors;
 public class User implements UserDetails {
     @Id
     @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NonNull
     @NotNull
     @Column
-//    @TextIndexed
     @Size(min = 2, max = 15, message = "First name must be between 2 and 15 characters long.")
     private String firstName;
 
     @NonNull
     @NotNull
     @Column
-//    @TextIndexed
     @Size(min = 2, max = 15, message = "Last name must be between 2 and 15 characters long.")
     private String lastName;
 
@@ -60,7 +54,6 @@ public class User implements UserDetails {
     @NonNull
     @NotNull
     @Column
-//    @TextIndexed
     @Size(min = 2, max = 15, message = "Username must e between 2 and 15 characters long.")
     private String username;
 
@@ -102,6 +95,16 @@ public class User implements UserDetails {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Column
     private LocalDateTime modified = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "owner")
+    private Project project;
+
+    @OneToMany(mappedBy = "owner")
+    private Sprint sprint;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "addedBy")
+    private HashSet<Task> tasks = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
