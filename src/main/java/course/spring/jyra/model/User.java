@@ -28,7 +28,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 @Entity
-@Table
+@Table(name = "app_user")
 public class User implements UserDetails {
 	@Id
 	@Column

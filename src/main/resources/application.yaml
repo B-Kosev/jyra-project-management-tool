@@ -6,18 +6,18 @@ server:
       timeout: 20m
 spring:
   datasource:
-    url: jdbc:h2:file:/data/demo
+    url: jdbc:h2:file:./jyradb
     username: sa
     password: password
     driverClassName: org.h2.Driver
   jpa:
-    spring.jpa.database-platform: org.hibernate.dialect.H2Dialec
+    database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
   h2:
     console:
       enabled: true
-      path: /db
-      settings.trace: false
-      settings.web-allow-others: false
   mvc:
     hiddenmethod:
       filter:

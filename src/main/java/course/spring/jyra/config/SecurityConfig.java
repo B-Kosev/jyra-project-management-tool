@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import course.spring.jyra.model.User;
 import course.spring.jyra.service.UserService;
@@ -34,22 +35,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // @formatter:on
 
 		// @formatter:off
-//        http.csrf().disable()
-//                .authorizeRequests()
-//                    //.antMatchers("/").permitAll()
-//                    .antMatchers("/login", "/register", "/index").permitAll()
+        http.csrf().disable()
+                .authorizeRequests()
+                    .antMatchers("/").permitAll()
+                    .antMatchers("/login", "/register", "/index").permitAll()
 //                    .anyRequest().authenticated()
-//                    .and()
-//                .formLogin()
-//                    .loginPage("/login")
-//                    .defaultSuccessUrl("/index")
-//                    .and()
-//                .logout()
-//                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                    .logoutSuccessUrl("/index")
-//                    .and()
-//                .exceptionHandling();
-        // .antMatchers("/dashboard/**").hasAuthority("ADMIN").anyRequest()
+                    .and()
+                .formLogin()
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/index")
+                    .and()
+                .logout()
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/index")
+                    .and()
+                .exceptionHandling();
+		
+		http.headers().frameOptions().disable();
+//         .antMatchers("/dashboard/**").hasAuthority("ADMIN").anyRequest()
 
         // @formatter:on
 	}
