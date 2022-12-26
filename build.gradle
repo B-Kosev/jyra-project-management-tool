@@ -5,6 +5,8 @@ plugins {
     id 'idea'
 }
 
+apply plugin: 'maven-publish'
+
 group = 'course.spring'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
@@ -47,5 +49,20 @@ idea {
     module {
         downloadJavadoc = true
         downloadSources = true
+    }
+}
+
+publishing {
+    publications {
+        customLibrary(MavenPublication) {
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            name = 'jyra-pmt-repo'
+            url = layout.buildDirectory.dir("jyra-pmt-repo")
+        }
     }
 }
