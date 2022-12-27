@@ -48,7 +48,7 @@ public class ProjectResultServiceImpl implements ProjectResultService {
             throw new EntityNotFoundException(String.format("There is a result created for project with ID=%s", proj.getId()));
         }
 
-        if (project.getSprint() != null) {
+        if (project.getActiveSprint() != null) {
             throw new ExistingEntityException("Project result cannot be created because not all sprints in the project are completed.");
         }
 

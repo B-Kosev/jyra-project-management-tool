@@ -49,15 +49,15 @@ public class Project {
 	@NonNull
 	@NotNull
 	@ManyToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "owner_id")
 	private User owner;
 
 	@OneToOne(mappedBy = "project")
 	private Board board;
 
 	@OneToOne
-	@JoinColumn(name = "sprint_id")
-	private Sprint sprint;
+	@JoinColumn(name = "active_sprint_id")
+	private Sprint activeSprint;
 
 	@OneToOne(mappedBy = "project")
 	private ProjectResult projectResult;

@@ -49,7 +49,7 @@ public class TaskResult {
     @NotNull
     @NonNull
      @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "verified_by")
+    @JoinColumn(name = "approver_id")
     private User verifiedBy;
 
     @Size(min = 10, max = 2500, message = "String must be between 10 and 2500 characters String, supporting Markdown syntax.")

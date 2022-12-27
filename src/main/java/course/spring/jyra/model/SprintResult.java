@@ -39,7 +39,8 @@ public class SprintResult {
 
     @NotNull
     @NonNull
-    @OneToOne(mappedBy = "result")
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "sprint_id")
     private Sprint sprint;
 
     @Builder.Default
