@@ -25,11 +25,11 @@ public class Board {
 	private Integer id;
 
 	@OneToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "project_id", referencedColumnName = "id")
+	@JoinColumn(name = "project_id")
 	private Project project;
 
 	@OneToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "sprint_id", referencedColumnName = "id")
+	@JoinColumn(name = "sprint_id")
 	private Sprint sprint;
 
 	@Column

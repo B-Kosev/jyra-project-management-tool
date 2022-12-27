@@ -55,7 +55,7 @@ public class Task {
 	@NotNull
 	@NonNull
 	@ManyToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "addedBy_id", referencedColumnName = "id")
+	@JoinColumn(name = "reporter_id")
 	private User addedBy;
 
 	@NotNull
@@ -70,13 +70,13 @@ public class Task {
 	private TaskStatus status = TaskStatus.TO_DO;
 
 	@ManyToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "sprint_id", referencedColumnName = "id")
+	@JoinColumn(name = "sprint_id")
 	private Sprint sprint;
 
 	@NotNull
 	@NonNull
 	@ManyToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "project_id", referencedColumnName = "id")
+	@JoinColumn(name = "project_id")
 	private Project project;
 
 	@OneToOne(mappedBy = "task")

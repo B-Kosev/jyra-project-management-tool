@@ -54,7 +54,7 @@ public class Sprint {
 
 	@NonNull
 	@NotNull
-	@OneToOne(mappedBy = "sprint")
+	@OneToOne(mappedBy = "activeSprint")
 	private Project project;
 
 	@NonNull
@@ -66,8 +66,7 @@ public class Sprint {
 	@OneToOne(mappedBy = "sprint")
 	private Board board;
 
-	@OneToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "result_id", referencedColumnName = "id")
+	@OneToOne(mappedBy = "sprint")
 	private SprintResult result;
 
 	@Builder.Default
