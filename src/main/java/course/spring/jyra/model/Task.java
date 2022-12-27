@@ -1,18 +1,4 @@
 package course.spring.jyra.model;
-/*
-id (generated automatically) - String number;
-kind - enumeration: RESEARCH, DESIGN, PROTOTYPING, IMPLEMENTATION, QA, OPERATIONS, BUG_FIXING, DOCUMENTATION, OTHER;
-title - string 2 to 120 characters String;
-addedBy - the User that has added the Task;
-estimatedEffort - integer number in effort units (the same units in which the team velocity is estimated - http://wiki.c2.com/?IdealProgrammingTime) ;
-status - enumeration PLANNED, ACTIVE, COMPLETED;
-sprint (optional) - the Sprint the Task beStrings, if already assigned (status ACTIVE or COMPLETED);
-developersAssigned - list of Developers assigned to the Task;
-description (optional) - string 150 - 2500 characters String, supporting Markdown syntax;
-tags - string including comma separated tags, allowing to find the Task by quick search;
-created (generated automatically) - time stamp of the moment the entity was created;
-modified (generated automatically) - time stamp of the moment the entity was last modified;
- */
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -52,8 +38,6 @@ public class Task {
 	@Column
 	private String title;
 
-	@NotNull
-	@NonNull
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "addedBy_id", referencedColumnName = "id")
 	private User addedBy;
@@ -73,8 +57,6 @@ public class Task {
 	@JoinColumn(name = "sprint_id", referencedColumnName = "id")
 	private Sprint sprint;
 
-	@NotNull
-	@NonNull
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "project_id", referencedColumnName = "id")
 	private Project project;
