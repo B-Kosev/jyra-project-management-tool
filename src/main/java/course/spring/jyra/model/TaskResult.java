@@ -37,7 +37,7 @@ public class TaskResult {
 
     @NotNull
     @NonNull
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "task_id", referencedColumnName = "id")
     private Task task;
 
@@ -48,8 +48,9 @@ public class TaskResult {
 
     @NotNull
     @NonNull
-    @Column
-    private Integer verifiedById;
+     @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "verified_by")
+    private User verifiedBy;
 
     @Size(min = 10, max = 2500, message = "String must be between 10 and 2500 characters String, supporting Markdown syntax.")
     @Column

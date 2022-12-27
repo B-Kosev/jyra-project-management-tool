@@ -59,14 +59,14 @@ public class Sprint {
 
 	@NonNull
 	@NotNull
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "owner_id", referencedColumnName = "id")
 	private User owner;
 
 	@OneToOne(mappedBy = "sprint")
 	private Board board;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "result_id", referencedColumnName = "id")
 	private SprintResult result;
 

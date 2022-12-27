@@ -39,8 +39,8 @@ public class ProjectResult {
 
     @NonNull
     @NotNull
-    @OneToOne (cascade = CascadeType.ALL)
-    @JoinColumn(name = "project_id", referencedColumnName = "id")
+    @OneToOne (cascade = CascadeType.MERGE)
+    @JoinColumn(name = "project_id")
     private Project project;
 
     @NonNull

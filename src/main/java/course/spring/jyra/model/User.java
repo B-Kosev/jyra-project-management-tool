@@ -60,14 +60,13 @@ public class User implements UserDetails {
 	private String username;
 
 	@NonNull
-	@Pattern(regexp = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,15}")
+//	@Pattern(regexp = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,15}")
 	@NotNull
 	@Column
 	private String password;
 
 	@NonNull
 	@NotNull
-	@NotEmpty
 	@Builder.Default
 	@Column
 	private Role role = Role.DEVELOPER;
@@ -103,6 +102,9 @@ public class User implements UserDetails {
 
 	@OneToMany(mappedBy = "owner")
 	private Set<Sprint> sprints;
+
+	@OneToMany(mappedBy = "verifiedBy")
+	private Set<TaskResult> taskResults;
 
 	@Builder.Default
 	@JsonIgnore

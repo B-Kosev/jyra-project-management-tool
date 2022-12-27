@@ -54,7 +54,7 @@ public class Task {
 
 	@NotNull
 	@NonNull
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "addedBy_id", referencedColumnName = "id")
 	private User addedBy;
 
@@ -69,13 +69,13 @@ public class Task {
 	@Column
 	private TaskStatus status = TaskStatus.TO_DO;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "sprint_id", referencedColumnName = "id")
 	private Sprint sprint;
 
 	@NotNull
 	@NonNull
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "project_id", referencedColumnName = "id")
 	private Project project;
 
@@ -83,7 +83,7 @@ public class Task {
 	private TaskResult taskResult;
 
 	@Column
-	@Size(min = 150, max = 2500, message = "String must be between 150 and 2500 characters String, supporting Markdown syntax")
+	@Size(min = 10, max = 2500, message = "String must be between 10 and 2500 characters String, supporting Markdown syntax")
 	private String description;
 
 	@NotNull
