@@ -38,21 +38,15 @@ public class ProjectResultServiceImpl implements ProjectResultService {
     }
 
     @Override
-    public ProjectResult create(ProjectResult projectResult) {
-        Project project = projectRepository.findById(projectResult.getProject().getId()).orElseThrow(() -> new EntityNotFoundException(String.format("Project with ID=%s not found.", (projectResult.getProject().getId()))));
-
-        Project proj = projectResult.getProject();
-        Optional<ProjectResult> projectResultMatch = projectResultRepository.findAll().stream().filter(projectResult1 -> projectResult1.getProject().equals(proj)).findAny();
-
-        if (projectResultMatch.isPresent()) {
-            throw new EntityNotFoundException(String.format("There is a result created for project with ID=%s", proj.getId()));
-        }
+    public ProjectResult create(ProjectResult projectResult, Integer projectId) {
+        Project project = projectRepository.findById(projectId).orElseThrow(() -> new EntityNotFoundException(String.format("Project with ID=%s not found.", (projectId))));
 
         if (project.getActiveSprint() != null) {
             throw new ExistingEntityException("Project result cannot be created because not all sprints in the project are completed.");
         }
 
         projectResult.setId(null);
+        projectResult.setProject(project);
         projectResult.setCreated(LocalDateTime.now());
         projectResult.setModified(LocalDateTime.now());
         calculateDuration(projectResult, project);
@@ -65,6 +59,7 @@ public class ProjectResultServiceImpl implements ProjectResultService {
         ProjectResult oldProjectResult = findById(oldId);
 
         projectResult.setId(oldProjectResult.getId());
+        projectResult.setProject(oldProjectResult.getProject());
         projectResult.setCreated(oldProjectResult.getCreated());
         projectResult.setModified(LocalDateTime.now());
 
@@ -74,6 +69,7 @@ public class ProjectResultServiceImpl implements ProjectResultService {
     @Override
     public ProjectResult update(ProjectResult projectResult) {
         ProjectResult oldProjectResult = findById(projectResult.getId());
+        projectResult.setProject(oldProjectResult.getProject());
         projectResult.setCreated(oldProjectResult.getCreated());
         projectResult.setModified(LocalDateTime.now());
         return projectResultRepository.save(projectResult);

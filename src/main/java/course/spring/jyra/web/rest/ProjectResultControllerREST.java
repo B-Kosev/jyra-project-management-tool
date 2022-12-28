@@ -38,9 +38,7 @@ public class ProjectResultControllerREST {
 
     @PostMapping("/{projectId}/project-result")
     public ResponseEntity<ProjectResult> addProjectResult(@PathVariable Integer projectId, @RequestBody ProjectResult projectResult) {
-        if (!projectId.equals(projectResult.getProject().getId()))
-            throw new InvalidClientDataException(String.format("Project ID %s from URL doesn't match ID %s in Request body", projectId, projectResult.getProject().getId()));
-        ProjectResult created = projectResultService.create(projectResult);
+        ProjectResult created = projectResultService.create(projectResult,projectId);
         return ResponseEntity.created(
                 ServletUriComponentsBuilder.fromCurrentRequest()
                         .pathSegment("{projectId}").buildAndExpand(created.getProject().getId()).toUri()).body(created);
@@ -48,8 +46,6 @@ public class ProjectResultControllerREST {
 
     @PutMapping("/{projectId}/project-result")
     public ProjectResult updateProjectResult(@PathVariable Integer projectId, @RequestBody ProjectResult projectResult) {
-        if (!projectId.equals(projectResult.getProject().getId()))
-            throw new InvalidClientDataException(String.format("Project ID %s from URL doesn't match ID %s in Request body", projectId, projectResult.getProject().getId()));
         return projectResultService.update(projectResult);
     }
 

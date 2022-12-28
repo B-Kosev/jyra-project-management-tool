@@ -12,7 +12,7 @@ public interface BoardService {
 
     Board findByProjectId(Integer projectId);
 
-    Board create(Board board);
+    Board create(Board board, Integer projectId, Integer sprintId);
 
     Board deleteById(Integer id);
 

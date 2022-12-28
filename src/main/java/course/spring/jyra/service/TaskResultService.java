@@ -9,7 +9,7 @@ public interface TaskResultService {
 
     TaskResult findById(Integer id);
 
-    TaskResult create(TaskResult taskResult);
+    TaskResult create(TaskResult taskResult, Integer taskId, Integer appeoverId);
 
     TaskResult update(TaskResult taskResult);
 

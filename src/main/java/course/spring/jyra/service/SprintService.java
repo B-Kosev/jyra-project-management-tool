@@ -12,11 +12,11 @@ public interface SprintService {
 
     Sprint findByTitle(String title);
 
-    Sprint create(Sprint sprint);
+    Sprint create(Sprint sprint, Integer ownerId, Integer projectId, Integer boardId, Integer resultId);
 
     Sprint deleteById(Integer id);
 
-    Sprint update(Sprint sprint);
+    Sprint update(Sprint sprint, Integer boardId, Integer resultId);
 
     long count();
 }

@@ -2,10 +2,12 @@ package course.spring.jyra.service.impl;
 
 
 
+import course.spring.jyra.dao.SprintRepository;
 import course.spring.jyra.dao.SprintResultRepository;
 import course.spring.jyra.dao.TaskResultRepository;
 import course.spring.jyra.exception.EntityNotFoundException;
 
+import course.spring.jyra.model.Sprint;
 import course.spring.jyra.model.SprintResult;
 import course.spring.jyra.model.TaskResult;
 import course.spring.jyra.service.SprintResultService;
@@ -19,11 +21,13 @@ import java.util.List;
 public class SprintResultServiceImpl implements SprintResultService {
     private final SprintResultRepository sprintResultRepository;
     private final TaskResultRepository taskResultRepository;
+    private final SprintRepository sprintRepository;
 
     @Autowired
-    public SprintResultServiceImpl(SprintResultRepository sprintResultRepository, TaskResultRepository taskResultRepository) {
+    public SprintResultServiceImpl(SprintResultRepository sprintResultRepository, TaskResultRepository taskResultRepository, SprintRepository sprintRepository) {
         this.sprintResultRepository = sprintResultRepository;
         this.taskResultRepository = taskResultRepository;
+        this.sprintRepository = sprintRepository;
     }
 
     @Override
@@ -37,8 +41,11 @@ public class SprintResultServiceImpl implements SprintResultService {
     }
 
     @Override
-    public SprintResult create(SprintResult sprintResult) {
+    public SprintResult create(SprintResult sprintResult, Integer sprintId) {
         sprintResult.setId(null);
+        Sprint sprint = sprintRepository.findById(sprintId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Sprint with id=%s could not be found", sprintId)));
+        sprintResult.setSprint(sprint);
         sprintResult.setCreated(LocalDateTime.now());
         sprintResult.setModified(LocalDateTime.now());
         sprintResult.setTeamVelocity(calculateTeamVelocity(sprintResult));

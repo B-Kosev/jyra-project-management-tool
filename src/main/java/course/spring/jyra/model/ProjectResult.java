@@ -37,8 +37,7 @@ public class ProjectResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NonNull
-    @NotNull
+
     @OneToOne (cascade = CascadeType.MERGE)
     @JoinColumn(name = "project_id")
     private Project project;

@@ -27,11 +27,11 @@ public class BoardController {
     }
 
     @PostMapping
-    public String addBoard(@ModelAttribute("board") Board board) {
-        boardService.create(board);
-        log.debug("POST: Board: {}", board);
-        return "redirect:/boards";
-    }
+//    public String addBoard(@ModelAttribute("board") Board board) {
+//        boardService.create(board);
+//        log.debug("POST: Board: {}", board);
+//        return "redirect:/boards";
+//    }
 
     @DeleteMapping
     public String deleteBoard(@RequestParam("delete") Integer id) {

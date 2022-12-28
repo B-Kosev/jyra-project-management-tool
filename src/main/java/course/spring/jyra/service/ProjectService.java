@@ -11,11 +11,11 @@ public interface ProjectService {
 
     Project findByTitle(String title);
 
-    Project create(Project project);
+    Project create(Project project, Integer ownerId, Integer boardId, Integer activeSprintId, Integer projectResultId);
 
     Project deleteById(Integer id);
 
-    Project update(Project project);
+    Project update(Project project, Integer boardId, Integer activeSprintId, Integer projectResultId);
 
     long count();
 

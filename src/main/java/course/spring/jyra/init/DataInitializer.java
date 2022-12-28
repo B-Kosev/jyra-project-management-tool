@@ -50,28 +50,28 @@ public class DataInitializer implements ApplicationRunner {
 				.password("Vankata1234@").role(Role.ADMIN).status(UserStatus.ACTIVE).imageUrl("any url").contacts("no contacts").build();
 		userService.create(admin);
 
-		Project project = Project.builder().title("IMC").description("Latest and greatest").owner(owner).tags("tag1").build();
-		projectService.create(project);
+		Project project = Project.builder().title("IMC").description("Latest and greatest").tags("tag1").build();
+		projectService.create(project,owner.getId(),null,null,null);
 
-		ProjectResult projectResult = ProjectResult.builder().project(project).duration(14).resultsDescription("actually very good project")
+		ProjectResult projectResult = ProjectResult.builder().resultsDescription("actually very good project")
 				.build();
-		projectResultService.create(projectResult);
+		projectResultService.create(projectResult,project.getId());
 
-		Sprint sprint = Sprint.builder().title("My first sprint").duration(14).project(project).owner(owner).build();
-		sprintService.create(sprint);
+		Sprint sprint = Sprint.builder().title("My first sprint").duration(14).build();
+		sprintService.create(sprint,owner.getId(),project.getId(),null,null);
 
-		SprintResult sprintResult = SprintResult.builder().sprint(sprint).resultsDescription("the best sprint").build();
-		sprintResultService.create(sprintResult);
+		SprintResult sprintResult = SprintResult.builder().resultsDescription("the best sprint").build();
+		sprintResultService.create(sprintResult,sprint.getId());
 
 		Task task = Task.builder().title("Fix the code").taskType(TaskType.TASK).estimatedEffort(3).status(TaskStatus.TO_DO)
 				.description("Fix everything").tags("no tags").build();
 		taskService.create(task, developer.getId(), project.getId(), null);
 
-		TaskResult taskResult = TaskResult.builder().task(task).actualEffort(3).resultsDescription("it was very hard").verifiedBy(owner)
+		TaskResult taskResult = TaskResult.builder().actualEffort(3).resultsDescription("it was very hard")
 				.build();
-		taskResultService.create(taskResult);
+		taskResultService.create(taskResult,task.getId(),owner.getId());
 
-		Board board = Board.builder().project(project).sprint(sprint).build();
-		boardService.create(board);
+		Board board = Board.builder().build();
+		boardService.create(board,project.getId(),sprint.getId());
 	}
 }

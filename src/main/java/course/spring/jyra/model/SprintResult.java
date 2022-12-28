@@ -27,7 +27,6 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 @Builder
 @Entity
 @Table
@@ -37,8 +36,6 @@ public class SprintResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
-    @NonNull
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "sprint_id")
     private Sprint sprint;

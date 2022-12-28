@@ -42,9 +42,7 @@ public class SprintResultControllerREST {
 
     @PostMapping("/{sprintId}/sprint-result")
     public ResponseEntity<SprintResult> addSprintResult(@PathVariable Integer sprintId, @RequestBody SprintResult sprintResult) {
-        if (!sprintId.equals(sprintResult.getSprint().getId()))
-            throw new InvalidClientDataException(String.format("sprint ID %s from URL doesn't match ID %s in Request body", sprintId, sprintResult.getSprint().getId()));
-        SprintResult created = sprintResultService.create(sprintResult);
+        SprintResult created = sprintResultService.create(sprintResult, sprintId);
         return ResponseEntity.created(
                 ServletUriComponentsBuilder.fromCurrentRequest()
                         .pathSegment("{projectId}").buildAndExpand(created.getSprint().getId()).toUri()).body(created);
@@ -64,7 +62,7 @@ public class SprintResultControllerREST {
         SprintResult sprintResult = sprintResultService.findBySprintId(sprintId);
 
         Board board = Board.builder().project(sprintService.findById(sprintResult.getSprint().getId()).getProject()).sprint(sprintResult.getSprint()).build();
-        boardService.create(board);
+        boardService.create(board,sprintService.findById(sprintId).getProject().getId(),sprintId);
 
         return sprintResultService.deleteById(deletedId);
     }

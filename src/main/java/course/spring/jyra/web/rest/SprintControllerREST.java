@@ -5,6 +5,7 @@ import course.spring.jyra.exception.EntityNotFoundException;
 import course.spring.jyra.exception.InvalidClientDataException;
 import course.spring.jyra.model.Board;
 import course.spring.jyra.model.ErrorResponse;
+import course.spring.jyra.model.Project;
 import course.spring.jyra.model.Sprint;
 import course.spring.jyra.service.BoardService;
 import course.spring.jyra.service.SprintService;
@@ -39,20 +40,26 @@ public class SprintControllerREST {
     }
 
     @PostMapping
-    public ResponseEntity<Sprint> addSprint(@RequestBody Sprint sprint) {
-        Board board = Board.builder().project(sprint.getProject()).build();
-        boardService.create(board);
-        Sprint created = sprintService.create(sprint);
+    public ResponseEntity<Sprint> addSprint(@RequestBody Sprint sprint, @RequestParam Integer ownerId,
+                                            @RequestParam Integer projectId,
+                                            @RequestParam(required = false) Integer resultId) {
+
+        // TODO: FIX THIS!
+        Board board = Board.builder().build();
+        boardService.create(board,projectId,sprint.getId());
+        Sprint created = sprintService.create(sprint, ownerId, projectId, board.getId(), resultId);
         return ResponseEntity.created(
                 ServletUriComponentsBuilder.fromCurrentRequest()
                         .pathSegment("{sprintId}").buildAndExpand(created.getId()).toUri()).body(created);
     }
 
     @PutMapping("/{sprintId}")
-    public Sprint updateSprint(@PathVariable Integer sprintId, @RequestBody Sprint sprint) {
+    public Sprint updateSprint(@PathVariable Integer sprintId, @RequestBody Sprint sprint,
+                               @RequestParam(required = false) Integer boardId,
+                               @RequestParam(required = false) Integer resultId) {
         if (!sprintId.equals(sprint.getId()))
             throw new InvalidClientDataException(String.format("Sprint ID %s from URL doesn't match ID %s in Request body", sprintId, sprint.getId()));
-        return sprintService.update(sprint);
+        return sprintService.update(sprint,boardId,resultId);
     }
 
     @DeleteMapping("/{sprintId}")

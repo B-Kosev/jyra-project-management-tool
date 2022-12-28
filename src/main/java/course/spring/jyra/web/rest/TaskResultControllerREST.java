@@ -40,11 +40,8 @@ public class TaskResultControllerREST {
 	}
 
 	@PostMapping("/{taskId}/task-result")
-	public ResponseEntity<TaskResult> addTaskResult(@PathVariable Integer taskId, @RequestBody TaskResult taskResult) {
-		if (!taskId.equals(taskResult.getTask().getId()))
-			throw new InvalidClientDataException(
-					String.format("Task ID %s from URL doesn't match ID %s in Request body", taskId, taskResult.getTask().getId()));
-		TaskResult created = taskResultService.create(taskResult);
+	public ResponseEntity<TaskResult> addTaskResult(@PathVariable Integer taskId, @RequestBody TaskResult taskResult,@RequestParam Integer approverId) {
+		TaskResult created = taskResultService.create(taskResult, taskId,approverId);
 
 		Task task = taskService.findById(taskResult.getTask().getId());
 		task.setStatus(TaskStatus.DONE);

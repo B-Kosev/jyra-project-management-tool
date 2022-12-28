@@ -9,7 +9,7 @@ public interface ProjectResultService {
 
     ProjectResult findById(Integer id);
 
-    ProjectResult create(ProjectResult projectResult);
+    ProjectResult create(ProjectResult projectResult, Integer projectId);
 
     ProjectResult update(ProjectResult projectResult, Integer oldId);
 

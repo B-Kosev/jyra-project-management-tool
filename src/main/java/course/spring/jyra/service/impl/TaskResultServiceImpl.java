@@ -1,12 +1,12 @@
 package course.spring.jyra.service.impl;
 
-import course.spring.jyra.dao.SprintRepository;
 import course.spring.jyra.dao.TaskRepository;
 import course.spring.jyra.dao.TaskResultRepository;
+import course.spring.jyra.dao.UserRepository;
 import course.spring.jyra.exception.EntityNotFoundException;
-import course.spring.jyra.model.Sprint;
 import course.spring.jyra.model.Task;
 import course.spring.jyra.model.TaskResult;
+import course.spring.jyra.model.User;
 import course.spring.jyra.service.TaskResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +17,14 @@ import java.util.List;
 @Service
 public class TaskResultServiceImpl implements TaskResultService {
     private final TaskResultRepository taskResultRepository;
+    private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public TaskResultServiceImpl(TaskResultRepository taskResultRepository) {
+    public TaskResultServiceImpl(TaskResultRepository taskResultRepository, TaskRepository taskRepository, UserRepository userRepository) {
         this.taskResultRepository = taskResultRepository;
+        this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -34,8 +38,17 @@ public class TaskResultServiceImpl implements TaskResultService {
     }
 
     @Override
-    public TaskResult create(TaskResult taskResult) {
+    public TaskResult create(TaskResult taskResult, Integer taskId, Integer approverId) {
         taskResult.setId(null);
+
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Task with id=%s could not be found", taskId)));
+        taskResult.setTask(task);
+
+        User user = userRepository.findById(approverId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("User with id=%s could not be found", approverId)));
+        taskResult.setVerifiedBy(user);
+
         taskResult.setCreated(LocalDateTime.now());
         taskResult.setModified(LocalDateTime.now());
         return taskResultRepository.save(taskResult);

@@ -46,8 +46,6 @@ public class Project {
 	@Column
 	private String description;
 
-	@NonNull
-	@NotNull
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "owner_id")
 	private User owner;

@@ -34,15 +34,15 @@ public class BoardControllerREST {
     }
 
     @PostMapping
-    public ResponseEntity<Board> addBoard(@RequestBody Board board) {
-        Board created = boardService.create(board);
+    public ResponseEntity<Board> addBoard(@RequestBody Board board, @RequestParam Integer projectId, @RequestParam Integer sprintId) {
+        Board created = boardService.create(board, projectId, sprintId);
         return ResponseEntity.created(
                 ServletUriComponentsBuilder.fromCurrentRequest()
                         .pathSegment("{boardId}").buildAndExpand(created.getId()).toUri()).body(created);
     }
 
     @PutMapping("/{boardId}")
-    public Board updateBoard(@PathVariable String boardId, @RequestBody Board board) {
+    public Board updateBoard(@PathVariable Integer boardId, @RequestBody Board board) {
         if (!boardId.equals(board.getId()))
             throw new InvalidClientDataException(String.format("Board ID %s from URL doesn't match ID %s in Request body", boardId, board.getId()));
         return boardService.update(board);

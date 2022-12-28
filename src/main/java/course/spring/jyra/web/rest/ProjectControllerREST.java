@@ -47,18 +47,23 @@ public class ProjectControllerREST {
     }
 
     @PostMapping
-    public ResponseEntity<Project> addProject(@RequestBody Project project) {
-        Project created = projectService.create(project);
+    public ResponseEntity<Project> addProject(@RequestBody Project project,  @RequestParam Integer ownerId,
+                                              @RequestParam(required = false) Integer boardId,
+                                              @RequestParam(required = false) Integer activeSprintId,
+                                              @RequestParam(required = false) Integer projectResultId) {
+        Project created = projectService.create(project,ownerId, boardId, activeSprintId, projectResultId);
         return ResponseEntity.created(
                 ServletUriComponentsBuilder.fromCurrentRequest()
                         .pathSegment("{projectId}").buildAndExpand(created.getId()).toUri()).body(created);
     }
 
     @PutMapping("/{projectId}")
-    public Project updateProject(@PathVariable Integer projectId, @RequestBody Project project) {
+    public Project updateProject(@PathVariable Integer projectId, @RequestBody Project project, @RequestParam(required = false) Integer boardId,
+                                 @RequestParam(required = false) Integer activeSprintId,
+                                 @RequestParam(required = false) Integer projectResultId) {
         if (!projectId.equals(project.getId()))
             throw new InvalidClientDataException(String.format("Project ID %s from URL doesn't match ID %s in Request body", projectId, project.getId()));
-        return projectService.update(project);
+        return projectService.update(project,boardId,activeSprintId,projectResultId);
     }
 
     @DeleteMapping("/{projectId}")

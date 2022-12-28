@@ -16,11 +16,17 @@ import java.util.List;
 public class SprintServiceImpl implements SprintService {
     private final SprintRepository sprintRepository;
     private final UserRepository userRepository;
+    private final SprintResultRepository sprintResultRepository;
+    private final ProjectRepository projectRepository;
+    private final BoardRepository boardRepository;
 
     @Autowired
-    public SprintServiceImpl(SprintRepository sprintRepository, UserRepository userRepository) {
+    public SprintServiceImpl(SprintRepository sprintRepository, UserRepository userRepository, SprintResultRepository sprintResultRepository, ProjectRepository projectRepository, BoardRepository boardRepository) {
         this.sprintRepository = sprintRepository;
         this.userRepository = userRepository;
+        this.sprintResultRepository = sprintResultRepository;
+        this.projectRepository = projectRepository;
+        this.boardRepository = boardRepository;
     }
 
     @Override
@@ -39,14 +45,35 @@ public class SprintServiceImpl implements SprintService {
     }
 
     @Override
-    public Sprint create(Sprint sprint) {
+    public Sprint create(Sprint sprint, Integer ownerId, Integer projectId, Integer boardId, Integer resultId) {
         sprint.setId(null);
+
+        User user = userRepository.findById(ownerId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("User with id=%s could not be found", ownerId)));
+        sprint.setOwner(user);
+
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Project with id=%s could not be found", projectId)));
+        sprint.setProject(project);
+
+        if(boardId != null){
+            Board board = boardRepository.findById(boardId)
+                    .orElseThrow(() -> new EntityNotFoundException(String.format("Board with id=%s could not be found", boardId)));
+            sprint.setBoard(board);
+        }
+
+        if(resultId != null){
+            SprintResult sprintResult = sprintResultRepository.findById(resultId)
+                    .orElseThrow(() -> new EntityNotFoundException(String.format("Sprint result with id=%s could not be found", resultId)));
+            sprint.setResult(sprintResult);
+        }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
-            User user = userRepository.findByUsername(auth.getName()).orElseThrow(() -> new EntityNotFoundException(String.format("User with username=%s could not be found", auth.getName())));
-            sprint.setOwner(user);
+            User currentUser = userRepository.findByUsername(auth.getName()).orElseThrow(() -> new EntityNotFoundException(String.format("User with username=%s could not be found", auth.getName())));
+            sprint.setOwner(currentUser);
         }
+
 
         sprint.setCreated(LocalDateTime.now());
         sprint.setModified(LocalDateTime.now());
@@ -55,8 +82,22 @@ public class SprintServiceImpl implements SprintService {
     }
 
     @Override
-    public Sprint update(Sprint sprint) {
+    public Sprint update(Sprint sprint,Integer boardId, Integer resultId) {
         Sprint oldSprint = findById(sprint.getId());
+        sprint.setOwner(oldSprint.getOwner());
+        sprint.setProject(oldSprint.getProject());
+
+        if(boardId != null){
+            Board board = boardRepository.findById(boardId)
+                    .orElseThrow(() -> new EntityNotFoundException(String.format("Board with id=%s could not be found", boardId)));
+            sprint.setBoard(board);
+        }
+
+        if(resultId != null){
+            SprintResult sprintResult = sprintResultRepository.findById(resultId)
+                    .orElseThrow(() -> new EntityNotFoundException(String.format("Sprint result with id=%s could not be found", resultId)));
+            sprint.setResult(sprintResult);
+        }
         sprint.setCreated(oldSprint.getCreated());
         sprint.setModified(LocalDateTime.now());
         return sprintRepository.save(sprint);

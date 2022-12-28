@@ -52,15 +52,11 @@ public class Sprint {
 	@Column
 	private long duration;
 
-	@NonNull
-	@NotNull
 	@OneToOne(mappedBy = "activeSprint")
 	private Project project;
 
-	@NonNull
-	@NotNull
 	@ManyToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "owner_id", referencedColumnName = "id")
+	@JoinColumn(name = "owner_id")
 	private User owner;
 
 	@OneToOne(mappedBy = "sprint")
@@ -70,7 +66,7 @@ public class Sprint {
 	private SprintResult result;
 
 	@Builder.Default
-	@OneToMany(mappedBy = "sprint")
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "sprint")
 	private Set<Task> tasks = new HashSet<>();
 
 	@Builder.Default

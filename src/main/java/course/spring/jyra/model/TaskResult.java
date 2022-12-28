@@ -35,10 +35,8 @@ public class TaskResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
-    @NonNull
     @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "task_id", referencedColumnName = "id")
+    @JoinColumn(name = "task_id")
     private Task task;
 
     @NotNull
@@ -46,9 +44,7 @@ public class TaskResult {
     @Column
     private int actualEffort;
 
-    @NotNull
-    @NonNull
-     @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "approver_id")
     private User verifiedBy;
 

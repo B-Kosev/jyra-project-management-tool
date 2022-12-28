@@ -9,7 +9,7 @@ public interface SprintResultService {
 
     SprintResult findById(Integer id);
 
-    SprintResult create(SprintResult sprintResult);
+    SprintResult create(SprintResult sprintResult, Integer sprintId);
 
     SprintResult update(SprintResult sprintResult);
 
