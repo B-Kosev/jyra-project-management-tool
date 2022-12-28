@@ -43,11 +43,9 @@ public class SprintControllerREST {
     public ResponseEntity<Sprint> addSprint(@RequestBody Sprint sprint, @RequestParam Integer ownerId,
                                             @RequestParam Integer projectId,
                                             @RequestParam(required = false) Integer resultId) {
-
-        // TODO: FIX THIS!
-        Board board = Board.builder().build();
-        boardService.create(board,projectId,sprint.getId());
-        Sprint created = sprintService.create(sprint, ownerId, projectId, board.getId(), resultId);
+        Sprint created = sprintService.create(sprint, ownerId, projectId, null, resultId);
+        Board board = boardService.create(Board.builder().build(),projectId,sprint.getId());
+        created = sprintService.update(created,board.getId(), created.getResult() == null ? null : created.getResult().getId());
         return ResponseEntity.created(
                 ServletUriComponentsBuilder.fromCurrentRequest()
                         .pathSegment("{sprintId}").buildAndExpand(created.getId()).toUri()).body(created);

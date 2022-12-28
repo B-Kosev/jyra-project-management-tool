@@ -56,24 +56,11 @@ public class SprintServiceImpl implements SprintService {
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Project with id=%s could not be found", projectId)));
         sprint.setProject(project);
 
-        if(boardId != null){
-            Board board = boardRepository.findById(boardId)
-                    .orElseThrow(() -> new EntityNotFoundException(String.format("Board with id=%s could not be found", boardId)));
-            sprint.setBoard(board);
-        }
-
         if(resultId != null){
             SprintResult sprintResult = sprintResultRepository.findById(resultId)
                     .orElseThrow(() -> new EntityNotFoundException(String.format("Sprint result with id=%s could not be found", resultId)));
             sprint.setResult(sprintResult);
         }
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) {
-            User currentUser = userRepository.findByUsername(auth.getName()).orElseThrow(() -> new EntityNotFoundException(String.format("User with username=%s could not be found", auth.getName())));
-            sprint.setOwner(currentUser);
-        }
-
 
         sprint.setCreated(LocalDateTime.now());
         sprint.setModified(LocalDateTime.now());
