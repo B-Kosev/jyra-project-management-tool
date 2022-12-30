@@ -1,5 +1,9 @@
 package course.spring.jyra.web.rest;
 
+import course.spring.jyra.dao.ProjectRepository;
+import course.spring.jyra.dao.SprintRepository;
+import course.spring.jyra.dao.TaskRepository;
+import course.spring.jyra.dao.TaskResultRepository;
 import course.spring.jyra.exception.EntityNotFoundException;
 import course.spring.jyra.exception.InvalidClientDataException;
 import course.spring.jyra.model.ErrorResponse;
@@ -17,10 +21,18 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserControllerREST {
     private final UserService userService;
+    private final ProjectRepository projectRepository;
+    private final SprintRepository sprintRepository;
+    private final TaskRepository taskRepository;
+    private final TaskResultRepository taskResultRepository;
 
     @Autowired
-    public UserControllerREST(UserService userService) {
+    public UserControllerREST(UserService userService, ProjectRepository projectRepository, SprintRepository sprintRepository, TaskRepository taskRepository, TaskResultRepository taskResultRepository) {
         this.userService = userService;
+        this.projectRepository = projectRepository;
+        this.sprintRepository = sprintRepository;
+        this.taskRepository = taskRepository;
+        this.taskResultRepository = taskResultRepository;
     }
 
     @GetMapping
@@ -50,6 +62,11 @@ public class UserControllerREST {
 
     @DeleteMapping("/{userId}")
     public User deleteUser(@PathVariable Integer userId) {
+        User user = userService.findById(userId);
+        user.getProjects().forEach(projectRepository::delete);
+        user.getSprints().forEach(sprintRepository::delete);
+        user.getTasks().forEach(taskRepository::delete);
+        user.getTaskResults().forEach(taskResultRepository::delete);
         return userService.deleteById(userId);
     }
 

@@ -98,13 +98,13 @@ public class User implements UserDetails {
 	private LocalDateTime modified = LocalDateTime.now();
 
 	@OneToMany(mappedBy = "owner")
-	private Set<Project> projects;
+	private Set<Project> projects = new HashSet<>();
 
 	@OneToMany(mappedBy = "owner")
-	private Set<Sprint> sprints;
+	private Set<Sprint> sprints = new HashSet<>();
 
 	@OneToMany(mappedBy = "verifiedBy")
-	private Set<TaskResult> taskResults;
+	private Set<TaskResult> taskResults = new HashSet<>();
 
 	@Builder.Default
 	@JsonIgnore
