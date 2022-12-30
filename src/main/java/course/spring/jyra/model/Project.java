@@ -46,21 +46,23 @@ public class Project {
 	@Column
 	private String description;
 
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
 	@JoinColumn(name = "owner_id")
 	private User owner;
 
-	@OneToOne(mappedBy = "project")
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "board_id")
 	private Board board;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "active_sprint_id")
 	private Sprint activeSprint;
 
-	@OneToOne(mappedBy = "project")
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "project_result_id")
 	private ProjectResult projectResult;
 
-	@OneToMany(mappedBy = "project")
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Task> tasks = new HashSet<>();
 
 	@Column

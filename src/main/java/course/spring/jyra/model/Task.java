@@ -38,7 +38,7 @@ public class Task {
 	@Column
 	private String title;
 
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
 	@JoinColumn(name = "reporter_id")
 	private User addedBy;
 
@@ -53,15 +53,16 @@ public class Task {
 	@Column
 	private TaskStatus status = TaskStatus.TO_DO;
 
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
 	@JoinColumn(name = "sprint_id")
 	private Sprint sprint;
 
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
 	@JoinColumn(name = "project_id")
 	private Project project;
 
-	@OneToOne(mappedBy = "task")
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "task_result_id")
 	private TaskResult taskResult;
 
 	@Column

@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -60,7 +59,7 @@ public class User implements UserDetails {
 	private String username;
 
 	@NonNull
-//	@Pattern(regexp = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,15}")
+	// @Pattern(regexp = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,15}")
 	@NotNull
 	@Column
 	private String password;
@@ -97,18 +96,21 @@ public class User implements UserDetails {
 	@Column
 	private LocalDateTime modified = LocalDateTime.now();
 
-	@OneToMany(mappedBy = "owner")
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
 	private Set<Project> projects = new HashSet<>();
 
-	@OneToMany(mappedBy = "owner")
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
 	private Set<Sprint> sprints = new HashSet<>();
 
-	@OneToMany(mappedBy = "verifiedBy")
+	@OneToMany(mappedBy = "verifiedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
 	private Set<TaskResult> taskResults = new HashSet<>();
 
 	@Builder.Default
 	@JsonIgnore
-	@OneToMany(mappedBy = "addedBy")
+	@OneToMany(mappedBy = "addedBy", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Task> tasks = new HashSet<>();
 
 	@Override

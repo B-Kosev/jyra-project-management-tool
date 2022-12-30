@@ -55,18 +55,20 @@ public class Sprint {
 	@OneToOne(mappedBy = "activeSprint")
 	private Project project;
 
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
 	@JoinColumn(name = "owner_id")
 	private User owner;
 
-	@OneToOne(mappedBy = "sprint")
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "board_id")
 	private Board board;
 
-	@OneToOne(mappedBy = "sprint")
-	private SprintResult result;
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "sprint_result_id")
+	private SprintResult sprintResult;
 
 	@Builder.Default
-	@OneToMany(fetch = FetchType.EAGER,mappedBy = "sprint")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "sprint")
 	private Set<Task> tasks = new HashSet<>();
 
 	@Builder.Default

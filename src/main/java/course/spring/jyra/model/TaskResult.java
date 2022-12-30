@@ -10,15 +10,17 @@ created (generated automatically) - time stamp of the moment the entity was crea
 modified (generated automatically) - time stamp of the moment the entity was last modified;
  */
 
-import lombok.*;
-import org.hibernate.Hibernate;
-import org.springframework.format.annotation.DateTimeFormat;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
-import java.util.Objects;
+
+import org.hibernate.Hibernate;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import lombok.*;
 
 @Getter
 @Setter
@@ -30,48 +32,49 @@ import java.util.Objects;
 @Entity
 @Table
 public class TaskResult {
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@Column
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "task_id")
-    private Task task;
+	@OneToOne(mappedBy = "taskResult")
+	private Task task;
 
-    @NotNull
-    @NonNull
-    @Column
-    private int actualEffort;
+	@NotNull
+	@NonNull
+	@Column
+	private int actualEffort;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "approver_id")
-    private User verifiedBy;
+	@ManyToOne
+	@JoinColumn(name = "approver_id")
+	private User verifiedBy;
 
-    @Size(min = 10, max = 2500, message = "String must be between 10 and 2500 characters String, supporting Markdown syntax.")
-    @Column
-    private String resultsDescription;
+	@Size(min = 10, max = 2500, message = "String must be between 10 and 2500 characters String, supporting Markdown syntax.")
+	@Column
+	private String resultsDescription;
 
-    @Builder.Default
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @Column
-    private LocalDateTime created = LocalDateTime.now();
+	@Builder.Default
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	@Column
+	private LocalDateTime created = LocalDateTime.now();
 
-    @Builder.Default
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @Column
-    private LocalDateTime modified = LocalDateTime.now();
+	@Builder.Default
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	@Column
+	private LocalDateTime modified = LocalDateTime.now();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        TaskResult that = (TaskResult) o;
-        return id != null && Objects.equals(id, that.id);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
+			return false;
+		TaskResult that = (TaskResult) o;
+		return id != null && Objects.equals(id, that.id);
+	}
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return getClass().hashCode();
+	}
 }

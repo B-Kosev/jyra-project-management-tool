@@ -8,6 +8,8 @@ import javax.persistence.*;
 import org.hibernate.Hibernate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.*;
 
 @Entity
@@ -24,12 +26,12 @@ public class Board {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@OneToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "project_id")
+	@OneToOne(mappedBy = "board")
+	@JsonIgnore
 	private Project project;
 
-	@OneToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "sprint_id")
+	@OneToOne(mappedBy = "board")
+	@JsonIgnore
 	private Sprint sprint;
 
 	@Column

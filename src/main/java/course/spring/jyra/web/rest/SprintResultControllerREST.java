@@ -1,5 +1,13 @@
 package course.spring.jyra.web.rest;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import course.spring.jyra.exception.EntityNotFoundException;
 import course.spring.jyra.exception.InvalidClientDataException;
 import course.spring.jyra.model.Board;
@@ -8,74 +16,68 @@ import course.spring.jyra.model.SprintResult;
 import course.spring.jyra.service.BoardService;
 import course.spring.jyra.service.SprintResultService;
 import course.spring.jyra.service.SprintService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/sprints")
 public class SprintResultControllerREST {
-    private final SprintResultService sprintResultService;
-    private final SprintService sprintService;
-    private final BoardService boardService;
+	private final SprintResultService sprintResultService;
+	private final SprintService sprintService;
+	private final BoardService boardService;
 
-    @Autowired
-    public SprintResultControllerREST(SprintResultService sprintResultService, SprintService sprintService, BoardService boardService) {
-        this.sprintResultService = sprintResultService;
-        this.sprintService = sprintService;
-        this.boardService = boardService;
-    }
+	@Autowired
+	public SprintResultControllerREST(SprintResultService sprintResultService, SprintService sprintService, BoardService boardService) {
+		this.sprintResultService = sprintResultService;
+		this.sprintService = sprintService;
+		this.boardService = boardService;
+	}
 
-    @GetMapping("/sprint-results")
-    public List<SprintResult> getSprintResults() {
-        return sprintResultService.findAll();
-    }
+	@GetMapping("/sprint-results")
+	public List<SprintResult> getSprintResults() {
+		return sprintResultService.findAll();
+	}
 
-    @GetMapping("/{sprintId}/sprint-result")
-    public SprintResult getResultsByProjectId(@PathVariable Integer sprintId) {
-        return sprintResultService.findBySprintId(sprintId);
-    }
+	@GetMapping("/{sprintId}/sprint-result")
+	public SprintResult getResultsByProjectId(@PathVariable Integer sprintId) {
+		return sprintResultService.findBySprintId(sprintId);
+	}
 
-    @PostMapping("/{sprintId}/sprint-result")
-    public ResponseEntity<SprintResult> addSprintResult(@PathVariable Integer sprintId, @RequestBody SprintResult sprintResult) {
-        SprintResult created = sprintResultService.create(sprintResult, sprintId);
-        return ResponseEntity.created(
-                ServletUriComponentsBuilder.fromCurrentRequest()
-                        .pathSegment("{projectId}").buildAndExpand(created.getSprint().getId()).toUri()).body(created);
-    }
+	@PostMapping("/{sprintId}/sprint-result")
+	public ResponseEntity<SprintResult> addSprintResult(@PathVariable Integer sprintId, @RequestBody SprintResult sprintResult) {
+		SprintResult created = sprintResultService.create(sprintResult, sprintId);
+		return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().pathSegment("{projectId}")
+				.buildAndExpand(created.getSprint().getId()).toUri()).body(created);
+	}
 
-    @PutMapping("/{sprintId}/sprint-result")
-    public SprintResult updateSprintResult(@PathVariable Integer sprintId, @RequestBody SprintResult sprintResult) {
-        if (!sprintId.equals(sprintResult.getSprint().getId()))
-            throw new InvalidClientDataException(String.format("sprint ID %s from URL doesn't match ID %s in Request body", sprintId, sprintResult.getSprint().getId()));
-        return sprintResultService.update(sprintResult);
-    }
+	@PutMapping("/sprint-result/{sprintResultId}")
+	public SprintResult updateSprintResult(@PathVariable Integer sprintResultId, @RequestBody SprintResult sprintResult) {
+		if (!sprintResultId.equals(sprintResult.getId()))
+			throw new InvalidClientDataException(String.format("Sprint result ID %s from URL doesn't match ID %s in Request body",
+					sprintResultId, sprintResult.getId()));
+		return sprintResultService.update(sprintResult);
+	}
 
-    @DeleteMapping("/{sprintId}/sprint-result")
-    public SprintResult deleteSprintResult(@PathVariable Integer sprintId) {
-        Integer deletedId = sprintService.findById(sprintId).getResult().getId();
+	@DeleteMapping("/{sprintId}/sprint-result")
+	public SprintResult deleteSprintResult(@PathVariable Integer sprintId) {
+		Integer deletedId = sprintService.findById(sprintId).getSprintResult().getId();
 
-        SprintResult sprintResult = sprintResultService.findBySprintId(sprintId);
+		SprintResult sprintResult = sprintResultService.findBySprintId(sprintId);
 
-        Board board = Board.builder().project(sprintService.findById(sprintResult.getSprint().getId()).getProject()).sprint(sprintResult.getSprint()).build();
-        boardService.create(board,sprintService.findById(sprintId).getProject().getId(),sprintId);
+		Board board = Board.builder().project(sprintService.findById(sprintResult.getSprint().getId()).getProject())
+				.sprint(sprintResult.getSprint()).build();
+		boardService.create(board, sprintService.findById(sprintId).getProject().getId(), sprintId);
 
-        return sprintResultService.deleteById(deletedId);
-    }
+		return sprintResultService.deleteById(deletedId);
+	}
 
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleEntityNotFound(EntityNotFoundException entityNotFoundException) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), entityNotFoundException.getMessage(), entityNotFoundException.toString()));
-    }
+	@ExceptionHandler
+	public ResponseEntity<ErrorResponse> handleEntityNotFound(EntityNotFoundException entityNotFoundException) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+				new ErrorResponse(HttpStatus.NOT_FOUND.value(), entityNotFoundException.getMessage(), entityNotFoundException.toString()));
+	}
 
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleInvalidClientData(InvalidClientDataException invalidClientDataException) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), invalidClientDataException.getMessage(), invalidClientDataException.toString()));
-    }
+	@ExceptionHandler
+	public ResponseEntity<ErrorResponse> handleInvalidClientData(InvalidClientDataException invalidClientDataException) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
+				invalidClientDataException.getMessage(), invalidClientDataException.toString()));
+	}
 }
