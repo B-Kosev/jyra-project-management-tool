@@ -61,12 +61,6 @@ public class ProjectServiceImpl implements ProjectService {
             project.setBoard(board);
         }
 
-        if(activeSprintId != null){
-            Sprint sprint = sprintRepository.findById(activeSprintId)
-                    .orElseThrow(() -> new EntityNotFoundException(String.format("Sprint with id=%s could not be found", activeSprintId)));
-            project.setActiveSprint(sprint);
-        }
-
         if(projectResultId != null){
             ProjectResult projectResult = projectResultRepository.findById(projectResultId)
                     .orElseThrow(() -> new EntityNotFoundException(String.format("Project result with id=%s could not be found", projectResultId)));
@@ -87,12 +81,6 @@ public class ProjectServiceImpl implements ProjectService {
             Board board = boardRepository.findById(boardId)
                     .orElseThrow(() -> new EntityNotFoundException(String.format("Board with id=%s could not be found", boardId)));
             project.setBoard(board);
-        }
-
-        if(activeSprintId != null){
-            Sprint sprint = sprintRepository.findById(activeSprintId)
-                    .orElseThrow(() -> new EntityNotFoundException(String.format("Sprint with id=%s could not be found", activeSprintId)));
-            project.setActiveSprint(sprint);
         }
 
         if(projectResultId != null){

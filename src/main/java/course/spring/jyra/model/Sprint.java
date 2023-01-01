@@ -52,7 +52,8 @@ public class Sprint {
 	@Column
 	private long duration;
 
-	@OneToOne(mappedBy = "activeSprint")
+	@ManyToOne
+	@JoinColumn(name = "project_id")
 	private Project project;
 
 	@ManyToOne

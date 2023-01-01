@@ -54,9 +54,8 @@ public class Project {
 	@JoinColumn(name = "board_id")
 	private Board board;
 
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "active_sprint_id")
-	private Sprint activeSprint;
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Sprint> sprints = new HashSet<>();
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "project_result_id")
