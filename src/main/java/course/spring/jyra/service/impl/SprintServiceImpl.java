@@ -2,6 +2,7 @@ package course.spring.jyra.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,15 +19,17 @@ public class SprintServiceImpl implements SprintService {
 	private final SprintResultRepository sprintResultRepository;
 	private final ProjectRepository projectRepository;
 	private final BoardRepository boardRepository;
+	private final TaskRepository taskRepository;
 
 	@Autowired
 	public SprintServiceImpl(SprintRepository sprintRepository, UserRepository userRepository,
-			SprintResultRepository sprintResultRepository, ProjectRepository projectRepository, BoardRepository boardRepository) {
+							 SprintResultRepository sprintResultRepository, ProjectRepository projectRepository, BoardRepository boardRepository, TaskRepository taskRepository) {
 		this.sprintRepository = sprintRepository;
 		this.userRepository = userRepository;
 		this.sprintResultRepository = sprintResultRepository;
 		this.projectRepository = projectRepository;
 		this.boardRepository = boardRepository;
+		this.taskRepository = taskRepository;
 	}
 
 	@Override
@@ -57,6 +60,7 @@ public class SprintServiceImpl implements SprintService {
 		Project project = projectRepository.findById(projectId)
 				.orElseThrow(() -> new EntityNotFoundException(String.format("Project with id=%s could not be found", projectId)));
 		sprint.setProject(project);
+//		project.setActiveSprint(sprint);
 
 		if (resultId != null) {
 			SprintResult sprintResult = sprintResultRepository.findById(resultId)

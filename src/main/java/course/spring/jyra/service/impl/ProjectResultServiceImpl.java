@@ -49,6 +49,7 @@ public class ProjectResultServiceImpl implements ProjectResultService {
 
 		Project project = projectRepository.findById(projectId)
 				.orElseThrow(() -> new EntityNotFoundException(String.format("Project with ID=%s not found.", (projectId))));
+		project.setProjectResult(projectResult);
 
 		if (project.getActiveSprint() != null) {
 			throw new ExistingEntityException("Project result cannot be created because not all sprints in the project are completed.");
@@ -87,6 +88,8 @@ public class ProjectResultServiceImpl implements ProjectResultService {
 	@Override
 	public ProjectResult deleteById(Integer id) {
 		ProjectResult oldProjectResult = findById(id);
+		Project project = oldProjectResult.getProject();
+		project.setProjectResult(null);
 		projectResultRepository.deleteById(id);
 		return oldProjectResult;
 	}

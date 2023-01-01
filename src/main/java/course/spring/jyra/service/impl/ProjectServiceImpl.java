@@ -107,7 +107,6 @@ public class ProjectServiceImpl implements ProjectService {
     public Project deleteById(Integer id) {
         Project oldProject = findById(id);
         projectRepository.deleteById(id);
-
         return oldProject;
     }
 

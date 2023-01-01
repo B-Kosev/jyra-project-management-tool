@@ -50,6 +50,7 @@ public class BoardServiceImpl implements BoardService {
 
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Project with id=%s could not be found", projectId)));
+        project.setBoard(board);
         board.setProject(project);
 
         Sprint sprint = sprintRepository.findById(sprintId)
@@ -62,6 +63,8 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Board deleteById(Integer id) {
         Board oldBoard = findById(id);
+        Project project = oldBoard.getProject();
+        project.setBoard(null);
         boardRepository.deleteById(id);
         return oldBoard;
     }

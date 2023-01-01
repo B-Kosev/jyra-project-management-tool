@@ -52,6 +52,7 @@ public class TaskResultServiceImpl implements TaskResultService {
 
 		Task task = taskRepository.findById(taskId)
 				.orElseThrow(() -> new EntityNotFoundException(String.format("Task with id=%s could not be found", taskId)));
+		task.setTaskResult(taskResult);
 		taskResult.setTask(task);
 
 		User user = userRepository.findById(approverId)
@@ -74,6 +75,10 @@ public class TaskResultServiceImpl implements TaskResultService {
 	@Override
 	public TaskResult deleteById(Integer id) {
 		TaskResult oldTaskResult = findById(id);
+
+		Task task = oldTaskResult.getTask();
+		task.setTaskResult(null);
+
 		taskResultRepository.deleteById(id);
 
 		return oldTaskResult;

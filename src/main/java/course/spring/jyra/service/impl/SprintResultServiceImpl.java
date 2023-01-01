@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import course.spring.jyra.model.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,8 +52,19 @@ public class SprintResultServiceImpl implements SprintResultService {
 		}
 
 		sprintResult.setId(null);
+
 		Sprint sprint = sprintRepository.findById(sprintId)
 				.orElseThrow(() -> new EntityNotFoundException(String.format("Sprint with id=%s could not be found", sprintId)));
+
+		sprint.setSprintResult(sprintResult);
+
+//		// if this sprint is the active sprint of the project make it not active
+//		Project project = sprint.getProject();
+//
+//		if(project.getActiveSprint().getId().equals(sprint.getId())){
+//			project.setActiveSprint(null);
+//		}
+
 		sprintResult.setSprint(sprint);
 		sprintResult.setCreated(LocalDateTime.now());
 		sprintResult.setModified(LocalDateTime.now());
@@ -74,8 +86,9 @@ public class SprintResultServiceImpl implements SprintResultService {
 	@Override
 	public SprintResult deleteById(Integer id) {
 		SprintResult oldSprintResult = findById(id);
+		Sprint sprint = oldSprintResult.getSprint();
+		sprint.setSprintResult(null);
 		sprintResultRepository.deleteById(id);
-
 		return oldSprintResult;
 	}
 
