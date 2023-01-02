@@ -18,18 +18,15 @@ public class SprintServiceImpl implements SprintService {
 	private final SprintResultRepository sprintResultRepository;
 	private final ProjectRepository projectRepository;
 	private final BoardRepository boardRepository;
-	private final TaskRepository taskRepository;
 
 	@Autowired
 	public SprintServiceImpl(SprintRepository sprintRepository, UserRepository userRepository,
-			SprintResultRepository sprintResultRepository, ProjectRepository projectRepository, BoardRepository boardRepository,
-			TaskRepository taskRepository) {
+			SprintResultRepository sprintResultRepository, ProjectRepository projectRepository, BoardRepository boardRepository) {
 		this.sprintRepository = sprintRepository;
 		this.userRepository = userRepository;
 		this.sprintResultRepository = sprintResultRepository;
 		this.projectRepository = projectRepository;
 		this.boardRepository = boardRepository;
-		this.taskRepository = taskRepository;
 	}
 
 	@Override
@@ -60,7 +57,6 @@ public class SprintServiceImpl implements SprintService {
 		Project project = projectRepository.findById(projectId)
 				.orElseThrow(() -> new EntityNotFoundException(String.format("Project with id=%s could not be found", projectId)));
 		sprint.setProject(project);
-		// project.setActiveSprint(sprint);
 
 		if (resultId != null) {
 			SprintResult sprintResult = sprintResultRepository.findById(resultId)
