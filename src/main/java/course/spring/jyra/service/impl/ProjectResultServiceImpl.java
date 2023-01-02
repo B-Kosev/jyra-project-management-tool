@@ -61,20 +61,9 @@ public class ProjectResultServiceImpl implements ProjectResultService {
 	}
 
 	@Override
-	public ProjectResult update(ProjectResult projectResult, Integer oldId) {
-		ProjectResult oldProjectResult = findById(oldId);
-
+	public ProjectResult update(Integer projectId, ProjectResult projectResult) {
+		ProjectResult oldProjectResult = findByProject(projectId);
 		projectResult.setId(oldProjectResult.getId());
-		projectResult.setProject(oldProjectResult.getProject());
-		projectResult.setCreated(oldProjectResult.getCreated());
-		projectResult.setModified(LocalDateTime.now());
-
-		return projectResultRepository.save(projectResult);
-	}
-
-	@Override
-	public ProjectResult update(ProjectResult projectResult) {
-		ProjectResult oldProjectResult = findById(projectResult.getId());
 		projectResult.setProject(oldProjectResult.getProject());
 		projectResult.setCreated(oldProjectResult.getCreated());
 		projectResult.setModified(LocalDateTime.now());

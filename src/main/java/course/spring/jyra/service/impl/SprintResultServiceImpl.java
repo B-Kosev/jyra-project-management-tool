@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import course.spring.jyra.model.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,13 +57,6 @@ public class SprintResultServiceImpl implements SprintResultService {
 
 		sprint.setSprintResult(sprintResult);
 
-//		// if this sprint is the active sprint of the project make it not active
-//		Project project = sprint.getProject();
-//
-//		if(project.getActiveSprint().getId().equals(sprint.getId())){
-//			project.setActiveSprint(null);
-//		}
-
 		sprintResult.setSprint(sprint);
 		sprintResult.setCreated(LocalDateTime.now());
 		sprintResult.setModified(LocalDateTime.now());
@@ -74,8 +66,9 @@ public class SprintResultServiceImpl implements SprintResultService {
 	}
 
 	@Override
-	public SprintResult update(SprintResult sprintResult) {
-		SprintResult oldSprintResult = findById(sprintResult.getId());
+	public SprintResult update(Integer sprintId, SprintResult sprintResult) {
+		SprintResult oldSprintResult = findBySprintId(sprintId);
+		sprintResult.setId(oldSprintResult.getId());
 		sprintResult.setSprint(oldSprintResult.getSprint());
 		sprintResult.setCreated(oldSprintResult.getCreated());
 		sprintResult.setModified(LocalDateTime.now());
@@ -99,7 +92,7 @@ public class SprintResultServiceImpl implements SprintResultService {
 	}
 
 	private int calculateTeamVelocity(SprintResult sprintResult) {
-		return sprintResult.getSprint().getTasks().stream()
+		return sprintResult.getSprint().getTasks().stream().filter(task -> task.getTaskResult() != null)
 				.map(task -> taskResultRepository.findById(task.getTaskResult().getId())
 						.orElseThrow(() -> new EntityNotFoundException(
 								String.format("Task result with ID=%s not found.", task.getTaskResult().getId()))))

@@ -1,23 +1,21 @@
 package course.spring.jyra.service;
 
-import course.spring.jyra.model.ProjectResult;
-
 import java.util.List;
 
+import course.spring.jyra.model.ProjectResult;
+
 public interface ProjectResultService {
-    List<ProjectResult> findAll();
+	List<ProjectResult> findAll();
 
-    ProjectResult findById(Integer id);
+	ProjectResult findById(Integer id);
 
-    ProjectResult create(ProjectResult projectResult, Integer projectId);
+	ProjectResult create(ProjectResult projectResult, Integer projectId);
 
-    ProjectResult update(ProjectResult projectResult, Integer oldId);
+	ProjectResult update(Integer projectId, ProjectResult projectResult);
 
-    ProjectResult update(ProjectResult projectResult);
+	ProjectResult deleteById(Integer id);
 
-    ProjectResult deleteById(Integer id);
+	ProjectResult findByProject(Integer id);
 
-    ProjectResult findByProject(Integer id);
-
-    long count();
+	long count();
 }

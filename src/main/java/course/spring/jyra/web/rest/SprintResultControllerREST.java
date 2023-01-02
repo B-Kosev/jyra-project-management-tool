@@ -48,12 +48,9 @@ public class SprintResultControllerREST {
 				.buildAndExpand(created.getSprint().getId()).toUri()).body(created);
 	}
 
-	@PutMapping("/sprint-result/{sprintResultId}")
-	public SprintResult updateSprintResult(@PathVariable Integer sprintResultId, @RequestBody SprintResult sprintResult) {
-		if (!sprintResultId.equals(sprintResult.getId()))
-			throw new InvalidClientDataException(String.format("Sprint result ID %s from URL doesn't match ID %s in Request body",
-					sprintResultId, sprintResult.getId()));
-		return sprintResultService.update(sprintResult);
+	@PutMapping("/{sprintId}/sprint-result")
+	public SprintResult updateSprintResult(@PathVariable Integer sprintId, @RequestBody SprintResult sprintResult) {
+		return sprintResultService.update(sprintId, sprintResult);
 	}
 
 	@DeleteMapping("/{sprintId}/sprint-result")

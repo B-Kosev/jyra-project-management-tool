@@ -14,6 +14,8 @@ import javax.validation.constraints.Size;
 import org.hibernate.Hibernate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -66,10 +68,12 @@ public class Sprint {
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "sprint_result_id")
+	@JsonIgnore
 	private SprintResult sprintResult;
 
 	@Builder.Default
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "sprint")
+	@JsonIgnore
 	private Set<Task> tasks = new HashSet<>();
 
 	@Builder.Default

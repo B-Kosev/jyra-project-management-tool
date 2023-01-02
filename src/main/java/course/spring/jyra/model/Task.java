@@ -10,6 +10,8 @@ import javax.validation.constraints.Size;
 import org.hibernate.Hibernate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.*;
 
 @Getter
@@ -63,6 +65,7 @@ public class Task {
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "task_result_id")
+	@JsonIgnore
 	private TaskResult taskResult;
 
 	@Column

@@ -12,6 +12,8 @@ import javax.validation.constraints.Size;
 import org.hibernate.Hibernate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.*;
 
 @Getter
@@ -55,13 +57,16 @@ public class Project {
 	private Board board;
 
 	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
 	private Set<Sprint> sprints = new HashSet<>();
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "project_result_id")
+	@JsonIgnore
 	private ProjectResult projectResult;
 
 	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
 	private Set<Task> tasks = new HashSet<>();
 
 	@Column

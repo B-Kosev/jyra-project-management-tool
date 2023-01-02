@@ -1,21 +1,21 @@
 package course.spring.jyra.service;
 
-import course.spring.jyra.model.SprintResult;
-
 import java.util.List;
 
+import course.spring.jyra.model.SprintResult;
+
 public interface SprintResultService {
-    List<SprintResult> findAll();
+	List<SprintResult> findAll();
 
-    SprintResult findById(Integer id);
+	SprintResult findById(Integer id);
 
-    SprintResult create(SprintResult sprintResult, Integer sprintId);
+	SprintResult create(SprintResult sprintResult, Integer sprintId);
 
-    SprintResult update(SprintResult sprintResult);
+	SprintResult update(Integer sprintId, SprintResult sprintResult);
 
-    SprintResult deleteById(Integer id);
+	SprintResult deleteById(Integer id);
 
-    SprintResult findBySprintId(Integer id);
+	SprintResult findBySprintId(Integer id);
 
-    long count();
+	long count();
 }

@@ -1,21 +1,21 @@
 package course.spring.jyra.service;
 
-import course.spring.jyra.model.TaskResult;
-
 import java.util.List;
 
+import course.spring.jyra.model.TaskResult;
+
 public interface TaskResultService {
-    List<TaskResult> findAll();
+	List<TaskResult> findAll();
 
-    TaskResult findById(Integer id);
+	TaskResult findById(Integer id);
 
-    TaskResult create(TaskResult taskResult, Integer taskId, Integer appeoverId);
+	TaskResult create(TaskResult taskResult, Integer taskId, Integer appeoverId);
 
-    TaskResult update(TaskResult taskResult);
+	TaskResult update(Integer taskId, TaskResult taskResult);
 
-    TaskResult deleteById(Integer id);
+	TaskResult deleteById(Integer id);
 
-    TaskResult findByTaskId(Integer id);
+	TaskResult findByTaskId(Integer id);
 
-    long count();
+	long count();
 }

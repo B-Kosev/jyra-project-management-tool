@@ -2,7 +2,6 @@ package course.spring.jyra.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,8 @@ public class SprintServiceImpl implements SprintService {
 
 	@Autowired
 	public SprintServiceImpl(SprintRepository sprintRepository, UserRepository userRepository,
-							 SprintResultRepository sprintResultRepository, ProjectRepository projectRepository, BoardRepository boardRepository, TaskRepository taskRepository) {
+			SprintResultRepository sprintResultRepository, ProjectRepository projectRepository, BoardRepository boardRepository,
+			TaskRepository taskRepository) {
 		this.sprintRepository = sprintRepository;
 		this.userRepository = userRepository;
 		this.sprintResultRepository = sprintResultRepository;
@@ -60,7 +60,7 @@ public class SprintServiceImpl implements SprintService {
 		Project project = projectRepository.findById(projectId)
 				.orElseThrow(() -> new EntityNotFoundException(String.format("Project with id=%s could not be found", projectId)));
 		sprint.setProject(project);
-//		project.setActiveSprint(sprint);
+		// project.setActiveSprint(sprint);
 
 		if (resultId != null) {
 			SprintResult sprintResult = sprintResultRepository.findById(resultId)
@@ -85,6 +85,8 @@ public class SprintServiceImpl implements SprintService {
 			Board board = boardRepository.findById(boardId)
 					.orElseThrow(() -> new EntityNotFoundException(String.format("Board with id=%s could not be found", boardId)));
 			sprint.setBoard(board);
+		} else {
+			sprint.setBoard(oldSprint.getBoard());
 		}
 
 		if (resultId != null) {
@@ -100,6 +102,7 @@ public class SprintServiceImpl implements SprintService {
 	@Override
 	public Sprint deleteById(Integer id) {
 		Sprint oldSprint = findById(id);
+		oldSprint.getTasks().forEach(task -> task.setSprint(null));
 		sprintRepository.deleteById(id);
 		return oldSprint;
 	}
