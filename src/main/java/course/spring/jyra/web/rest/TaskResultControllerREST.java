@@ -46,7 +46,7 @@ public class TaskResultControllerREST {
 
 		Task task = taskService.findById(taskResult.getTask().getId());
 		task.setStatus(TaskStatus.DONE);
-		taskService.update(task, task.getSprint().getId());
+		taskService.update(task, task.getSprint() != null ? task.getSprint().getId() : null);
 
 		return ResponseEntity.created(
 				ServletUriComponentsBuilder.fromCurrentRequest().pathSegment("{taskId}").buildAndExpand(created.getTask().getId()).toUri())
