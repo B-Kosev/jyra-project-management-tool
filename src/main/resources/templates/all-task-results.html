@@ -27,10 +27,10 @@
             <tbody>
             <tr style="text-align: center" th:each="taskResult : ${taskResults}">
                 <td>
-                    <a th:href="@{'/tasks/' + ${taskResult.taskId}}" th:text="${taskMap.get(taskResult).title}"></a>
+                    <a th:href="@{'/tasks/' + ${taskResult.task.id}}" th:text="${taskMap.get(taskResult).title}"></a>
                 </td>
                 <td>
-                    <a th:href="@{'/users/' + ${taskResult.verifiedById}}"
+                    <a th:href="@{'/users/' + ${taskResult.verifiedBy.id}}"
                        th:text="'@' + ${userMap.get(taskResult).username}"></a>
                 </td>
                 <td th:text="${taskResult.actualEffort}">Actual effort not found</td>

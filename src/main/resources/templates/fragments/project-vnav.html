@@ -3,7 +3,7 @@
         <h3 th:text="${project.title}"></h3>
     </li>
     <li style="text-align: center" class="nav-item">
-        <span th:if="${project.projectResultId}" class="badge bg-success">Completed</span>
+        <span th:if="${project.projectResult.id}" class="badge bg-success">Completed</span>
     </li>
     <li class="nav-item">
         <hr/>
@@ -11,7 +11,7 @@
     <li class="nav-item">
         <a class="nav-link" th:href="@{'/projects/' + ${project.id}}">Information</a>
     </li>
-    <li class="nav-item" th:if="${project.currentSprintId}">
+<!--    <li class="nav-item" th:if="${project.currentSprintId}">-->
         <a class="nav-link" th:href="@{'/projects/' + ${project.id} + '/board'}">Current Sprint (Board)</a>
     </li>
     <li class="nav-item">
@@ -20,10 +20,10 @@
     <li class="nav-item">
         <a class="nav-link" th:href="@{'/projects/' + ${project.id} + '/sprint-results'}">Previous Sprint Results</a>
     </li>
-    <li class="nav-item" th:if="${project.projectResultId}">
+    <li class="nav-item" th:if="${project.projectResult.id}">
         <a class="nav-link" th:href="@{'/projectresults/' + ${project.id} + '/project-result'}">Project Result</a>
     </li>
-    <li class="nav-item" th:unless="${project.projectResultId}" th:if="${canFinishProject == true}">
+    <li class="nav-item" th:unless="${project.projectResult.id}" th:if="${canFinishProject == true}">
         <a class="nav-link" th:href="@{'/projectresults/create'(projectId=${project.id})}">Create Project Result</a>
     </li>
     <!--    TODO: Add settings page containing delete and edit project-->

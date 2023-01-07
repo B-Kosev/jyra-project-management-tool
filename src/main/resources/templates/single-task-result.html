@@ -8,10 +8,10 @@
 <div class="container-fluid mt-5">
     <div style="text-align: center" class="row justify-content-center">
         <div id="taskresult-task-title" class="col-md-2 border">
-            <a th:href="@{'/tasks/' + ${taskResult.taskId}}" th:text="${task.title}"></a>
+            <a th:href="@{'/tasks/' + ${taskResult.task.id}}" th:text="${task.title}"></a>
         </div>
         <div id="taskresult-verifiedby" class="col-md-2 border">
-            <p>Verified by: <a th:href="@{'/users/' + ${taskResult.verifiedById}}"
+            <p>Verified by: <a th:href="@{'/users/' + ${taskResult.verifiedBy.id}}"
                                th:text="'@' + ${approver.username}"></a></p>
         </div>
         <div id="taskresult-effort" class="col-md-2 border">
@@ -30,7 +30,8 @@
     <div id="taskresult-desc" class="row justify-content-center">
         <div class="col-md-8 border">
             <h5>Description</h5>
-            <div th:utext="${htmlService.markdownToHtml(taskResult.resultsDescription)}"></div>
+            <div th:utext="${taskResult?.resultsDescription}"></div>
+<!--            <div th:utext="${htmlService.markdownToHtml(taskResult.resultsDescription)}"></div>-->
         </div>
     </div>
 </div>

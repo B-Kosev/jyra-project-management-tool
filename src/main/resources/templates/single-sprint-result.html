@@ -8,7 +8,7 @@
 <div class="container-fluid mt-5">
     <div class="row justify-content-center">
         <div class="col-md-5 border">
-            <a th:href="@{'/sprints/' + ${sprintResult.sprintId}}" th:text="${sprint.title}"></a>
+            <a th:href="@{'/sprints/' + ${sprintResult.sprint.id}}" th:text="${sprint.title}"></a>
         </div>
         <div class="col-md-5 border">
             <p th:text="'Team velocity: ' + ${sprintResult.teamVelocity}"></p>
@@ -34,10 +34,10 @@
                 <tbody>
                 <tr style="text-align: center" th:each="taskResult : ${taskResults}">
                     <td>
-                        <a th:href="@{'/tasks/' + ${taskResult.taskId}}" th:text="${taskMap.get(taskResult).title}"></a>
+                        <a th:href="@{'/tasks/' + ${taskResult.task.id}}" th:text="${taskMap.get(taskResult).title}"></a>
                     </td>
                     <td>
-                        <a th:href="@{'/users/' + ${taskResult.verifiedById}}"
+                        <a th:href="@{'/users/' + ${taskResult.verifiedBy.id}}"
                            th:text="'@' + ${userMap.get(taskResult).username}"></a>
                     </td>
                     <td th:text="${taskResult.actualEffort}">Actual effort not found</td>

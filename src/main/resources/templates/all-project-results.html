@@ -27,7 +27,7 @@
             <tbody>
             <tr style="text-align: center" th:each="projectResult : ${projectResults}">
                 <td>
-                    <a th:href="@{'/projects/' + ${projectResult.projectId}}"
+                    <a th:href="@{'/projects/' + ${projectResult.project.id}}"
                        th:text="${map.get(projectResult).title}"></a>
                 </td>
                 <td

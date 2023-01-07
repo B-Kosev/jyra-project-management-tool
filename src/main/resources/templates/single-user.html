@@ -109,7 +109,7 @@
                         </thead>
                         <tbody>
                         <tr style="text-align: center" th:each="project : ${projects}"
-                            th:if="${project.projectResultId == null}">
+                            th:if="${project.projectResult?.id == null}">
                             <td>
                                 <a th:href="@{'/projects/' + ${project.id}}" th:text="${project.title}"></a>
                             </td>
@@ -134,7 +134,7 @@
                         <tbody>
                         <tr style="text-align: center" th:each="projectResult : ${completedProjectResults}">
                             <td>
-                                <a th:href="@{'/projects/' + ${projectResult.projectId}}"
+                                <a th:href="@{'/projects/' + ${projectResult.project?.id}}"
                                    th:text="${projectMapPo.get(projectResult).title}"></a>
                             </td>
                             <td th:text="${T(course.spring.jyra.utils.DateConverter).convertDate(projectResult.endDate)}">

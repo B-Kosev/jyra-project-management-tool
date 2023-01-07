@@ -8,7 +8,7 @@
 <div class="container-fluid mt-5">
     <div class="row justify-content-center">
         <div class="col-md-2 border">
-            <a th:href="@{'/projects/' + ${projectResult.projectId}}" th:text="${project.title}"></a>
+            <a th:href="@{'/projects/' + ${projectResult.project.id}}" th:text="${project.title}"></a>
         </div>
         <div class="col-md-2 border">
             <p th:text="'End date: ' + ${T(course.spring.jyra.utils.DateConverter).convertDate(projectResult.endDate)}"></p>
