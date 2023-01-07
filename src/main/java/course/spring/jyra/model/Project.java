@@ -54,10 +54,12 @@ public class Project {
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "board_id")
+	@ToString.Exclude
 	private Board board;
 
 	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnore
+	@ToString.Exclude
 	private Set<Sprint> sprints = new HashSet<>();
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -67,6 +69,7 @@ public class Project {
 
 	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnore
+	@ToString.Exclude
 	private Set<Task> tasks = new HashSet<>();
 
 	@Column

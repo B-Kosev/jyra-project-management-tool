@@ -54,6 +54,7 @@ public class ProjectController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findByUsername(auth.getName());
 
+		model.addAttribute("canCreateProject", true);
 		model.addAttribute("projects", projectService.findAll());
 		model.addAttribute("map", map);
 		model.addAttribute("htmlService", htmlService);

@@ -12,7 +12,7 @@
         </div>
 
         <div class="col-sm-10 d-flex justify-content-center row">
-            <div class="m-3" th:unless="${project.projectResult.id}">
+            <div class="m-3" th:unless="${project.projectResult?.id}">
                 <h3>Backlog</h3>
                 <!--                TODO: Try to make the button on the right-->
                 <a class="btn btn-primary" th:href="@{/tasks/create(projectId=${project.id})}" role="button"
@@ -41,13 +41,15 @@
                         </td>
                         <td th:text="${task.taskType.getReadable()}">Task type not found</td>
                         <td>
-                            <a th:href="@{'/users/' + ${task.addedBy.id}}" th:text="'@' + ${map.get(task).username}"></a>
+                            <a th:href="@{'/users/' + ${task.addedBy.id}}"
+                               th:text="'@' + ${map.get(task).username}"></a>
                         </td>
                         <td th:text="${task.estimatedEffort}">Estimation not found</td>
                         <td th:text="${task.status.getReadable()}">Status not found</td>
                         <td class="align-middle w-25" style="text-align: right">
                             <form action="#" th:action="@{'/tasks/delete'(taskId=${task.id}, projectId=${project.id})}"
-                                  th:method="delete" th:unless="${project.projectResult.id}" th:if="${canManageSprintsAndTasks == true}">
+                                  th:method="delete" th:unless="${project.projectResult?.id}"
+                                  th:if="${canManageSprintsAndTasks == true}">
                                 <a class="btn btn-primary"
                                    th:href="@{/tasks/edit(taskId=${task.id}, projectId=${project.id})}" role="button">Edit</a>
                                 <input type="submit" class="btn btn-danger" value="Delete" th:method="DELETE"/>

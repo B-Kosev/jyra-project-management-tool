@@ -51,11 +51,11 @@
                         </div>
 
                         <div class="form-floating mb-3">
-                            <select th:field="*{roles}" id="userType" class="form-control">
+                            <select th:field="*{role}" id="userType" class="form-control">
                                 <option th:each="role : ${T(course.spring.jyra.model.Role).values()}"
                                         th:value="${role}"
                                         th:text="${role}"
-                                        th:selected="${#sets.contains(user.roles, role)}">User type
+                                        th:selected="${#sets.contains(user.role, role)}">User type
                                 </option>
                             </select>
                             <label for="userType">User type</label>

@@ -114,7 +114,8 @@ public class ProjectResultController {
 	public String updateProjectResult(@RequestParam Integer projectResultId, @ModelAttribute ProjectResult projectResult) {
 		log.debug("UPDATE: Project result: {}", projectResult);
 		projectResult.setId(projectResultId);
-		projectResultService.update(projectResult.getProject().getId(), projectResult);
+		ProjectResult oldProjectResult = projectResultService.findById(projectResultId);
+		projectResultService.update(oldProjectResult.getProject().getId(), projectResult);
 		return "redirect:/projectresults";
 	}
 }

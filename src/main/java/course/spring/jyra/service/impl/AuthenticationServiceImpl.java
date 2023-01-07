@@ -3,8 +3,6 @@ package course.spring.jyra.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import course.spring.jyra.exception.InvalidEntityException;
-import course.spring.jyra.model.Role;
 import course.spring.jyra.model.User;
 import course.spring.jyra.service.AuthenticationService;
 import course.spring.jyra.service.UserService;
@@ -20,9 +18,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 	@Override
 	public User register(User user) {
-		if (user.getRole().equals(Role.ADMIN)) {
-			throw new InvalidEntityException("Admins cannot be registered.");
-		}
 		return userService.create(user);
 	}
 

@@ -80,7 +80,7 @@ public class User implements UserDetails {
 
 	@Builder.Default
 	@Column
-	private String imageUrl = "images/default.jpg";
+	private String imageUrl = "/images/default.jpg";
 
 	@Builder.Default
 	@Column
@@ -98,19 +98,23 @@ public class User implements UserDetails {
 
 	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnore
+	@ToString.Exclude
 	private Set<Project> projects = new HashSet<>();
 
 	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnore
+	@ToString.Exclude
 	private Set<Sprint> sprints = new HashSet<>();
 
 	@OneToMany(mappedBy = "verifiedBy", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnore
+	@ToString.Exclude
 	private Set<TaskResult> taskResults = new HashSet<>();
 
 	@Builder.Default
 	@JsonIgnore
 	@OneToMany(mappedBy = "addedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+	@ToString.Exclude
 	private Set<Task> tasks = new HashSet<>();
 
 	@Override

@@ -21,21 +21,22 @@
                             <label for="sprintTitleId">Title</label>
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label for="devIds" class="col-sm-2 control-label">Developers</label>
-                            <select class="js-example-basic-multiple form-control" th:field="*{developersIds}"
-                                    id="devIds" name="developersIds" multiple="multiple">
-                                <option th:each="developer : ${developers}"
-                                        th:value="${developer.id}"
-                                        th:text="${developer.username}">Developer
-                                </option>
-                            </select>
-                        </div>
+                        <!--                        <div class="form-group mb-3">-->
+                        <!--                            <label for="devIds" class="col-sm-2 control-label">Developers</label>-->
+                        <!--                            <select class="js-example-basic-multiple form-control" th:field="*{developersIds}"-->
+                        <!--                                    id="devIds" name="developersIds" multiple="multiple">-->
+                        <!--                                <option th:each="developer : ${developers}"-->
+                        <!--                                        th:value="${developer.id}"-->
+                        <!--                                        th:text="${developer.username}">Developer-->
+                        <!--                                </option>-->
+                        <!--                            </select>-->
+                        <!--                        </div>-->
 
                         <div class="form-group mb-3">
                             <label for="tasksIds" class="col-sm-2 control-label">Tasks</label>
-                            <select class="js-example-basic-multiple form-control" th:field="*{tasksIds}"
+                            <select class="js-example-basic-multiple form-control" th:field="*{tasks}"
                                     id="tasksIds" name="tasksIds" multiple="multiple">
+                                <!-- Value should be only 'task' but if left that way it tries to parse it to Integer-->
                                 <option th:each="task : ${tasks}"
                                         th:value="${task.id}"
                                         th:text="${task.title}">Task

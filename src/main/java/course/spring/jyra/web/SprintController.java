@@ -1,6 +1,7 @@
 package course.spring.jyra.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -58,20 +59,23 @@ public class SprintController {
 		}
 
 		model.addAttribute("request", "POST");
-		model.addAttribute("project", project);
+		// model.addAttribute("project", project);
 		model.addAttribute("developers",
 				userService.findAll().stream().filter(user -> user.getRole().equals(Role.DEVELOPER)).collect(Collectors.toList()));
-		model.addAttribute("tasks",
-				project.getTasks().stream().filter(task -> !task.getStatus().equals(TaskStatus.DONE)).collect(Collectors.toList()));
+		List<Task> tasks = project.getTasks().stream().filter(task -> !task.getStatus().equals(TaskStatus.DONE))
+				.collect(Collectors.toList());
+		log.info("Tasks: " + tasks);
+		tasks.forEach(task -> System.out.println(task.toString()));
+		model.addAttribute("tasks", tasks);
 		return "form-sprint";
 	}
 
 	@PostMapping("/create")
-	public String addSprint(@ModelAttribute Sprint sprint) {
+	public String addSprint(@ModelAttribute Sprint sprint, @RequestParam Integer projectId) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findByUsername(auth.getName());
-		Sprint created = sprintService.create(sprint, user.getId(), sprint.getProject().getId(), null, null);
-		Board board = boardService.create(Board.builder().build(), sprint.getProject().getId(), sprint.getId());
+		Sprint created = sprintService.create(sprint, user.getId(), projectId, null, null);
+		Board board = boardService.create(Board.builder().build(), projectId, sprint.getId());
 		sprintService.update(created, board.getId(), created.getSprintResult() == null ? null : created.getSprintResult().getId());
 		log.debug("POST: Sprint: {}", sprint);
 		return "redirect:/sprints";

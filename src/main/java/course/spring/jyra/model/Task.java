@@ -57,10 +57,12 @@ public class Task {
 
 	@ManyToOne
 	@JoinColumn(name = "sprint_id")
+	// @ToString.Exclude
 	private Sprint sprint;
 
 	@ManyToOne
 	@JoinColumn(name = "project_id")
+	// @ToString.Exclude
 	private Project project;
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
