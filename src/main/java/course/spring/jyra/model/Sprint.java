@@ -74,6 +74,7 @@ public class Sprint {
 	@Builder.Default
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "sprint")
 	@JsonIgnore
+	@ToString.Exclude
 	private Set<Task> tasks = new HashSet<>();
 
 	@Builder.Default

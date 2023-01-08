@@ -32,6 +32,7 @@ public class Board {
 
 	@OneToOne(mappedBy = "board")
 	@JsonIgnore
+	@ToString.Exclude
 	private Sprint sprint;
 
 	@Column

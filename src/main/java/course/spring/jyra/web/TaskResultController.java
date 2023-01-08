@@ -89,15 +89,15 @@ public class TaskResultController {
 	}
 
 	@PostMapping("/create")
-	public String addTaskResult(@ModelAttribute TaskResult taskResult) {
+	public String addTaskResult(@ModelAttribute TaskResult taskResult, @RequestParam Integer taskId) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findByUsername(auth.getName());
-		taskResultService.create(taskResult, taskResult.getTask().getId(), user.getId());
+		taskResultService.create(taskResult, taskId, user.getId());
 
 		// update task status through service in order to apply changes to board
-		Task task = taskResult.getTask();
+		Task task = taskService.findById(taskId);
 		task.setStatus(TaskStatus.DONE);
-		taskService.update(task, task.getSprint().getId());
+		taskService.update(task, task.getSprint() != null ? task.getSprint().getId() : null);
 
 		log.debug("POST: Task result: {}", taskResult);
 		return "redirect:/taskresults";

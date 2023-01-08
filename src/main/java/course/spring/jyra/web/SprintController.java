@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import course.spring.jyra.exception.EntityNotFoundException;
 import course.spring.jyra.model.*;
 import course.spring.jyra.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -85,10 +84,10 @@ public class SprintController {
 	public String deleteSprint(@RequestParam Integer sprintId) {
 		Sprint sprint = sprintService.findById(sprintId);
 
-		Board board = boardService.findAll().stream().filter(b -> b.getProject().getId().equals(sprint.getProject().getId())).findFirst()
-				.orElseThrow(() -> new EntityNotFoundException(
-						String.format("Board for project with ID=%s not found.", sprint.getProject().getId())));
-		boardService.deleteById(board.getId());
+		// Board board = boardService.findAll().stream().filter(b -> b.getProject().getId().equals(sprint.getProject().getId())).findFirst()
+		// .orElseThrow(() -> new EntityNotFoundException(
+		// String.format("Board for project with ID=%s not found.", sprint.getProject().getId())));
+		// boardService.deleteById(board.getId());
 
 		log.debug("DELETE: Sprint: {}", sprint);
 		sprintService.deleteById(sprintId);
@@ -112,10 +111,9 @@ public class SprintController {
 		model.addAttribute("request", "PUT");
 		model.addAttribute("owners",
 				userService.findAll().stream().filter(user -> user.getRole().equals(Role.PRODUCT_OWNER)).collect(Collectors.toList()));
-//		model.addAttribute("developers",
-//				userService.findAll().stream().filter(user -> user.getRole().equals(Role.DEVELOPER)).collect(Collectors.toList()));
-		model.addAttribute("tasks",
-				taskService.findAll().stream().filter(task -> task.getSprint() == null).collect(Collectors.toList()));
+		// model.addAttribute("developers",
+		// userService.findAll().stream().filter(user -> user.getRole().equals(Role.DEVELOPER)).collect(Collectors.toList()));
+		model.addAttribute("tasks", taskService.findAll().stream().filter(task -> task.getSprint() == null).collect(Collectors.toList()));
 		return "form-sprint";
 	}
 
