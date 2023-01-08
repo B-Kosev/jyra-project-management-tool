@@ -36,7 +36,7 @@
 
                         <div class="form-group mb-3">
                             <label for="verifiedById" class="col-sm-2 control-label">Verified By</label>
-                            <select class="js-example-basic-single form-control" th:field="*{verifiedById}"
+                            <select class="js-example-basic-single form-control" th:field="*{verifiedBy.id}"
                                     id="verifiedById" name="verifiedById">
                                 <option th:each="user : ${users}"
                                         th:value="${user.id}"

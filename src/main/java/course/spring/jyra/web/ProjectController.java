@@ -100,48 +100,45 @@ public class ProjectController {
 		return "single-project";
 	}
 
-	// This method combines Board and Current Sprint
-	// @GetMapping("/{projectId}/board")
-	// public String getProjectBoard(Model model, @PathVariable Integer projectId) {
-	// Board board = boardService.findByProjectId(projectId);
-	// Sprint sprint = sprintService.findById(projectService.findById(projectId).getCurrentSprintId());
-	// List<Task> toDo = sprint.getTasksIds().stream().map(taskService::findById).filter(task -> task.getStatus().equals(TaskStatus.TO_DO))
-	// .collect(Collectors.toList());
-	// List<Task> inProgress = sprint.getTasksIds().stream().map(taskService::findById)
-	// .filter(task -> task.getStatus().equals(TaskStatus.IN_PROGRESS)).collect(Collectors.toList());
-	// List<Task> inReview = sprint.getTasksIds().stream().map(taskService::findById)
-	// .filter(task -> task.getStatus().equals(TaskStatus.IN_REVIEW)).collect(Collectors.toList());
-	// List<Task> done = sprint.getTasksIds().stream().map(taskService::findById).filter(task -> task.getStatus().equals(TaskStatus.DONE))
-	// .collect(Collectors.toList());
-	// List<User> devs = sprint.getDevelopersIds().stream().map(userService::findById).collect(Collectors.toList());
-	//
-	// Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	// User editor = userService.findByUsername(auth.getName());
-	// boolean canFinishProject = false;
-	// boolean canEditSprint = false;
-	//
-	// if (projectService.findById(projectId).getOwnerId().equals(editor.getId())) {
-	// canFinishProject = true;
-	// }
-	//
-	// if (projectService.findById(projectId).getOwnerId().equals(editor.getId())
-	// || projectService.findById(projectId).getDevelopersIds().contains(editor.getId())) {
-	// canEditSprint = true;
-	// }
-	//
-	// model.addAttribute("canFinishProject", canFinishProject);
-	// model.addAttribute("canEditSprint", canEditSprint);
-	// model.addAttribute("sprint", sprint);
-	// model.addAttribute("project", projectService.findById(projectId));
-	// model.addAttribute("owner", userService.findById(sprint.getOwnerId()));
-	// model.addAttribute("devs", devs);
-	// model.addAttribute("toDoList", toDo);
-	// model.addAttribute("inProgressList", inProgress);
-	// model.addAttribute("inReviewList", inReview);
-	// model.addAttribute("doneList", done);
-	//
-	// return "single-project-board";
-	// }
+	 //This method combines Board and Current Sprint
+	 @GetMapping("/{projectId}/board")
+	 public String getProjectBoard(Model model, @PathVariable Integer projectId) {
+	 List<Sprint> sprints = new ArrayList<>(projectService.findById(projectId).getSprints());
+	 Sprint sprint = sprintService.findById(sprints.get(sprints.size()-1).getId());
+	 List<Task> toDo = sprint.getTasks().stream().map(task -> taskService.findById(task.getId())).filter(task -> task.getStatus().equals(TaskStatus.TO_DO))
+	 .collect(Collectors.toList());
+	 List<Task> inProgress = sprint.getTasks().stream().map(task -> taskService.findById(task.getId()))
+	 .filter(task -> task.getStatus().equals(TaskStatus.IN_PROGRESS)).collect(Collectors.toList());
+	 List<Task> inReview = sprint.getTasks().stream().map(task -> taskService.findById(task.getId()))
+	 .filter(task -> task.getStatus().equals(TaskStatus.IN_REVIEW)).collect(Collectors.toList());
+	 List<Task> done = sprint.getTasks().stream().map(task -> taskService.findById(task.getId())).filter(task -> task.getStatus().equals(TaskStatus.DONE))
+	 .collect(Collectors.toList());
+
+	 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	 User editor = userService.findByUsername(auth.getName());
+	 boolean canFinishProject = false;
+	 boolean canEditSprint = false;
+
+	 if (projectService.findById(projectId).getOwner().getId().equals(editor.getId())) {
+	 canFinishProject = true;
+	 }
+
+	 if (projectService.findById(projectId).getOwner().getId().equals(editor.getId())) {
+	 canEditSprint = true;
+	 }
+
+	 model.addAttribute("canFinishProject", canFinishProject);
+	 model.addAttribute("canEditSprint", canEditSprint);
+	 model.addAttribute("sprint", sprint);
+	 model.addAttribute("project", projectService.findById(projectId));
+	 model.addAttribute("owner", userService.findById(sprint.getOwner().getId()));
+	 model.addAttribute("toDoList", toDo);
+	 model.addAttribute("inProgressList", inProgress);
+	 model.addAttribute("inReviewList", inReview);
+	 model.addAttribute("doneList", done);
+
+	 return "single-project-board";
+	 }
 
 	@GetMapping("/{projectId}/backlog")
 	public String getProjectBacklog(Model model, @PathVariable Integer projectId) {
@@ -166,7 +163,7 @@ public class ProjectController {
 	@GetMapping("/{projectId}/sprint-results")
 	public String getPrevSprintResults(Model model, @PathVariable Integer projectId) {
 		List<SprintResult> sprintResultsList = new ArrayList<>();
-		projectService.findById(projectId).getSprints().forEach(sprint -> sprintResultsList.add(sprint.getSprintResult()));
+		projectService.findById(projectId).getSprints().forEach(sprint -> {if(sprint.getSprintResult() != null) sprintResultsList.add(sprint.getSprintResult());});
 		Map<SprintResult, Sprint> map = new HashMap<>();
 		sprintResultsList.forEach(sprintResult -> map.put(sprintResult, sprintResult.getSprint()));
 

@@ -91,6 +91,7 @@ public class TaskController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User editor = userService.findByUsername(auth.getName());
 
+		model.addAttribute("canCreateResult", true);
 		model.addAttribute("task", task);
 		model.addAttribute("reporter", task.getAddedBy());
 		model.addAttribute("sprint", task.getSprint());

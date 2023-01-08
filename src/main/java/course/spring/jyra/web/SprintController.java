@@ -112,10 +112,10 @@ public class SprintController {
 		model.addAttribute("request", "PUT");
 		model.addAttribute("owners",
 				userService.findAll().stream().filter(user -> user.getRole().equals(Role.PRODUCT_OWNER)).collect(Collectors.toList()));
-		model.addAttribute("developers",
-				userService.findAll().stream().filter(user -> user.getRole().equals(Role.DEVELOPER)).collect(Collectors.toList()));
+//		model.addAttribute("developers",
+//				userService.findAll().stream().filter(user -> user.getRole().equals(Role.DEVELOPER)).collect(Collectors.toList()));
 		model.addAttribute("tasks",
-				taskService.findAll().stream().filter(task -> task.getSprint().getId() == null).collect(Collectors.toList()));
+				taskService.findAll().stream().filter(task -> task.getSprint() == null).collect(Collectors.toList()));
 		return "form-sprint";
 	}
 
@@ -123,7 +123,8 @@ public class SprintController {
 	public String updateSprint(@RequestParam Integer sprintId, @ModelAttribute Sprint sprint) {
 		log.debug("UPDATE: Sprint: {}", sprint);
 		sprint.setId(sprintId);
-		sprintService.update(sprint, sprint.getBoard().getId(), sprint.getSprintResult().getId());
+		sprint.setBoard(sprintService.findById(sprintId).getBoard());
+		sprintService.update(sprint, sprint.getBoard().getId(), null);
 		return "redirect:/sprints";
 	}
 

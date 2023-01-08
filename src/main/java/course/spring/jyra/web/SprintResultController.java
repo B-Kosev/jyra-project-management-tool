@@ -83,8 +83,8 @@ public class SprintResultController {
 	}
 
 	@PostMapping("/create")
-	public String addSprintResult(@ModelAttribute SprintResult sprintResult) {
-		sprintResultService.create(sprintResult, sprintResult.getId());
+	public String addSprintResult(@ModelAttribute SprintResult sprintResult, @RequestParam Integer sprintId) {
+		sprintResultService.create(sprintResult, sprintId);
 
 		log.debug("POST: Sprint result: {}", sprintResult);
 		return "redirect:/sprintresults";
