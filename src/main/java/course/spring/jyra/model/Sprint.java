@@ -69,6 +69,7 @@ public class Sprint {
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "sprint_result_id")
 	@JsonIgnore
+	@ToString.Exclude
 	private SprintResult sprintResult;
 
 	@Builder.Default
