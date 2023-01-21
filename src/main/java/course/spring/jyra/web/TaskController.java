@@ -45,7 +45,7 @@ public class TaskController {
 
 		model.addAttribute("tasks", taskService.findAll());
 		model.addAttribute("map", map);
-		log.debug("GET: Tasks: {}", taskService.findAll());
+		log.info("GET: Tasks: {}", taskService.findAll());
 		return "all-tasks";
 	}
 
@@ -72,14 +72,14 @@ public class TaskController {
 		User user = userService.findByUsername(auth.getName());
 
 		taskService.create(task, user.getId(), projectId, null);
-		log.debug("POST: Task: {}", task);
+		log.info("POST: Task: {}", task);
 		return "redirect:/tasks";
 	}
 
 	@DeleteMapping("/delete")
 	public String deleteTask(@RequestParam Integer taskId, @RequestParam Integer projectId) {
 		Task task = taskService.findById(taskId);
-		log.debug("DELETE: Task: {}", task);
+		log.info("DELETE: Task: {}", task);
 		taskService.deleteById(taskId, projectId);
 		return "redirect:/tasks";
 	}
@@ -96,7 +96,7 @@ public class TaskController {
 		model.addAttribute("reporter", task.getAddedBy());
 		model.addAttribute("sprint", task.getSprint());
 
-		log.debug("GET: Task with Id=%s : {}", id, taskService.findById(id));
+		log.info("GET: Task with Id=%s : {}", id, taskService.findById(id));
 		return "single-task";
 	}
 
@@ -120,7 +120,7 @@ public class TaskController {
 
 	@PutMapping("/edit")
 	public String updateTask(@RequestParam Integer taskId, @RequestParam Integer projectId, @ModelAttribute Task task) {
-		log.debug("UPDATE: Task: {}", task);
+		log.info("UPDATE: Task: {}", task);
 		task.setId(taskId);
 		task.setProject(projectService.findById(projectId));
 		taskService.update(task, null);
@@ -135,7 +135,7 @@ public class TaskController {
 	// model.addAttribute("tasks", taskService.findBySearch(keywords));
 	// model.addAttribute("map", map);
 	//
-	// log.debug("GET: Tasks by search: {}", taskService.findBySearch(keywords));
+	// log.info("GET: Tasks by search: {}", taskService.findBySearch(keywords));
 	// return "all-tasks";
 	// }
 }

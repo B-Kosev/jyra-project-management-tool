@@ -38,3 +38,9 @@ info:
     name: Jyra Project Management Tool
     description: Project for the Spring v5 course
     version: 1.0-SNAPSHOT
+logging:
+  file:
+    path: ./logs
+    name: jyra.log
+  level:
+    root: info

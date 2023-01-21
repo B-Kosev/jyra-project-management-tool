@@ -44,7 +44,7 @@ public class SprintController {
 		model.addAttribute("sprints", sprintService.findAll());
 		model.addAttribute("map", map);
 
-		log.debug("GET: Sprints: {}", sprintService.findAll());
+		log.info("GET: Sprints: {}", sprintService.findAll());
 		return "all-sprints";
 	}
 
@@ -63,8 +63,6 @@ public class SprintController {
 				userService.findAll().stream().filter(user -> user.getRole().equals(Role.DEVELOPER)).collect(Collectors.toList()));
 		List<Task> tasks = project.getTasks().stream().filter(task -> !task.getStatus().equals(TaskStatus.DONE))
 				.collect(Collectors.toList());
-		log.info("Tasks: " + tasks);
-		tasks.forEach(task -> System.out.println(task.toString()));
 		model.addAttribute("tasks", tasks);
 		return "form-sprint";
 	}
@@ -76,7 +74,7 @@ public class SprintController {
 		Sprint created = sprintService.create(sprint, user.getId(), projectId, null, null);
 		Board board = boardService.create(Board.builder().build(), projectId, sprint.getId());
 		sprintService.update(created, board.getId(), created.getSprintResult() == null ? null : created.getSprintResult().getId());
-		log.debug("POST: Sprint: {}", sprint);
+		log.info("POST: Sprint: {}", sprint);
 		return "redirect:/sprints";
 	}
 
@@ -89,7 +87,7 @@ public class SprintController {
 		// String.format("Board for project with ID=%s not found.", sprint.getProject().getId())));
 		// boardService.deleteById(board.getId());
 
-		log.debug("DELETE: Sprint: {}", sprint);
+		log.info("DELETE: Sprint: {}", sprint);
 		sprintService.deleteById(sprintId);
 		return "redirect:/sprints";
 	}
@@ -97,7 +95,7 @@ public class SprintController {
 	@GetMapping("/{sprintId}")
 	public String getSprintById(Model model, @PathVariable("sprintId") Integer id) {
 		model.addAttribute("sprint", sprintService.findById(id));
-		log.debug("GET: Sprint with Id=%s : {}", id, sprintService.findById(id));
+		log.info("GET: Sprint with Id=%s : {}", id, sprintService.findById(id));
 		// TODO:should redirect to other page
 		return "redirect:/sprints";
 	}
@@ -119,7 +117,7 @@ public class SprintController {
 
 	@PutMapping("/edit")
 	public String updateSprint(@RequestParam Integer sprintId, @ModelAttribute Sprint sprint) {
-		log.debug("UPDATE: Sprint: {}", sprint);
+		log.info("UPDATE: Sprint: {}", sprint);
 		sprint.setId(sprintId);
 		sprint.setBoard(sprintService.findById(sprintId).getBoard());
 		sprintService.update(sprint, sprint.getBoard().getId(), null);
@@ -134,7 +132,7 @@ public class SprintController {
 	// model.addAttribute("sprints", sprintService.findBySearch(keywords));
 	// model.addAttribute("map", map);
 	//
-	// log.debug("GET: Tasks by search: {}", sprintService.findBySearch(keywords));
+	// log.info("GET: Tasks by search: {}", sprintService.findBySearch(keywords));
 	// return "all-sprints";
 	// }
 }

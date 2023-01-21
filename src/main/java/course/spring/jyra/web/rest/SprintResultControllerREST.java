@@ -16,9 +16,11 @@ import course.spring.jyra.model.SprintResult;
 import course.spring.jyra.service.BoardService;
 import course.spring.jyra.service.SprintResultService;
 import course.spring.jyra.service.SprintService;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/sprints")
+@Slf4j
 public class SprintResultControllerREST {
 	private final SprintResultService sprintResultService;
 	private final SprintService sprintService;
@@ -33,23 +35,27 @@ public class SprintResultControllerREST {
 
 	@GetMapping("/sprint-results")
 	public List<SprintResult> getSprintResults() {
+		log.info("GET: All sprint results");
 		return sprintResultService.findAll();
 	}
 
 	@GetMapping("/{sprintId}/sprint-result")
 	public SprintResult getResultsByProjectId(@PathVariable Integer sprintId) {
+		log.info("GET: Sprint result for sprint with ID={}", sprintId);
 		return sprintResultService.findBySprintId(sprintId);
 	}
 
 	@PostMapping("/{sprintId}/sprint-result")
 	public ResponseEntity<SprintResult> addSprintResult(@PathVariable Integer sprintId, @RequestBody SprintResult sprintResult) {
 		SprintResult created = sprintResultService.create(sprintResult, sprintId);
+		log.info("POST: Sprint result for sprint with ID={}", sprintId);
 		return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().pathSegment("{projectId}")
 				.buildAndExpand(created.getSprint().getId()).toUri()).body(created);
 	}
 
 	@PutMapping("/{sprintId}/sprint-result")
 	public SprintResult updateSprintResult(@PathVariable Integer sprintId, @RequestBody SprintResult sprintResult) {
+		log.info("PUT: Sprint result for sprint with ID={}", sprintId);
 		return sprintResultService.update(sprintId, sprintResult);
 	}
 
@@ -62,7 +68,7 @@ public class SprintResultControllerREST {
 		Board board = Board.builder().project(sprintService.findById(sprintResult.getSprint().getId()).getProject())
 				.sprint(sprintResult.getSprint()).build();
 		boardService.create(board, sprintService.findById(sprintId).getProject().getId(), sprintId);
-
+		log.info("DELETE: Sprint result for sprint with ID={}", sprintId);
 		return sprintResultService.deleteById(deletedId);
 	}
 

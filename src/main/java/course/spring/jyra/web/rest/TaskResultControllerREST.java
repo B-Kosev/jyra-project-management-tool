@@ -16,9 +16,11 @@ import course.spring.jyra.model.TaskResult;
 import course.spring.jyra.model.TaskStatus;
 import course.spring.jyra.service.TaskResultService;
 import course.spring.jyra.service.TaskService;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/tasks")
+@Slf4j
 public class TaskResultControllerREST {
 	private final TaskResultService taskResultService;
 	private final TaskService taskService;
@@ -31,11 +33,13 @@ public class TaskResultControllerREST {
 
 	@GetMapping("/task-results")
 	public List<TaskResult> getTaskResults() {
+		log.info("GET: All task results");
 		return taskResultService.findAll();
 	}
 
 	@GetMapping("/{taskId}/task-result")
 	public TaskResult getResultsByTaskId(@PathVariable Integer taskId) {
+		log.info("GET: Task result for task with ID={}", taskId);
 		return taskResultService.findById(taskId);
 	}
 
@@ -47,7 +51,7 @@ public class TaskResultControllerREST {
 		Task task = taskService.findById(taskResult.getTask().getId());
 		task.setStatus(TaskStatus.DONE);
 		taskService.update(task, task.getSprint() != null ? task.getSprint().getId() : null);
-
+		log.info("POST: Task result for task with ID={}", taskId);
 		return ResponseEntity.created(
 				ServletUriComponentsBuilder.fromCurrentRequest().pathSegment("{taskId}").buildAndExpand(created.getTask().getId()).toUri())
 				.body(created);
@@ -55,6 +59,7 @@ public class TaskResultControllerREST {
 
 	@PutMapping("/{taskId}/task-result")
 	public TaskResult updateTask(@PathVariable Integer taskId, @RequestBody TaskResult taskResult) {
+		log.info("PUT: Task result for task with ID={}", taskId);
 		return taskResultService.update(taskId, taskResult);
 	}
 
@@ -65,6 +70,7 @@ public class TaskResultControllerREST {
 		Task task = taskService.findById(taskId);
 		task.setStatus(TaskStatus.IN_PROGRESS);
 		taskService.update(task, task.getSprint().getId());
+		log.info("DELETE: Task result for task with ID={}", taskId);
 
 		return taskResultService.deleteById(deletedId);
 	}

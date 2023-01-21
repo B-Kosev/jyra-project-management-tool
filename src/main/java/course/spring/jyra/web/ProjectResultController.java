@@ -46,7 +46,7 @@ public class ProjectResultController {
 		model.addAttribute("projectResults", projectResultService.findAll());
 		model.addAttribute("map", map);
 
-		log.debug("GET: Project results: {}", projectResultService.findAll());
+		log.info("GET: Project results: {}", projectResultService.findAll());
 		return "all-project-results";
 	}
 
@@ -69,7 +69,7 @@ public class ProjectResultController {
 		model.addAttribute("map", map);
 		model.addAttribute("htmlService", htmlService);
 
-		log.debug("GET: Result of Project with ID=%s: {}", projectId, projectResultService.findByProject(projectId));
+		log.info("GET: Result of Project with ID=%s: {}", projectId, projectResultService.findByProject(projectId));
 		return "single-project-result";
 	}
 
@@ -88,7 +88,7 @@ public class ProjectResultController {
 	@PostMapping("/create")
 	public String addProjectResult(@ModelAttribute ProjectResult projectResult, @RequestParam Integer projectId) {
 		projectResultService.create(projectResult, projectId);
-		log.debug("POST: Project result: {}", projectResult);
+		log.info("POST: Project result: {}", projectResult);
 		return "redirect:/projectresults";
 	}
 
@@ -105,14 +105,14 @@ public class ProjectResultController {
 	@DeleteMapping("/delete")
 	public String deleteProjectResult(@RequestParam Integer projectResultId) {
 		ProjectResult projectResult = projectResultService.findById(projectResultId);
-		log.debug("DELETE: Project result: {}", projectResult);
+		log.info("DELETE: Project result: {}", projectResult);
 		projectResultService.deleteById(projectResultId);
 		return "redirect:/projectresults";
 	}
 
 	@PutMapping("/edit")
 	public String updateProjectResult(@RequestParam Integer projectResultId, @ModelAttribute ProjectResult projectResult) {
-		log.debug("UPDATE: Project result: {}", projectResult);
+		log.info("UPDATE: Project result: {}", projectResult);
 		projectResult.setId(projectResultId);
 		ProjectResult oldProjectResult = projectResultService.findById(projectResultId);
 		projectResultService.update(oldProjectResult.getProject().getId(), projectResult);

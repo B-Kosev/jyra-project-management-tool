@@ -59,7 +59,7 @@ public class ProjectController {
 		model.addAttribute("map", map);
 		model.addAttribute("htmlService", htmlService);
 
-		log.debug("GET: Projects: {}", projectService.findAll());
+		log.info("GET: Projects: {}", projectService.findAll());
 		return "all-projects";
 	}
 
@@ -81,7 +81,7 @@ public class ProjectController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findByUsername(auth.getName());
 		projectService.create(project, user.getId(), null, null, null);
-		log.debug("POST: Project: {}", project);
+		log.info("POST: Project: {}", project);
 		return "redirect:/projects";
 	}
 
@@ -96,49 +96,49 @@ public class ProjectController {
 		model.addAttribute("canFinishProject", true);
 		model.addAttribute("htmlService", htmlService);
 
-		log.debug("GET: Project with Id=%s : {}", id, projectService.findById(id));
+		log.info("GET: Project with Id=%s : {}", id, projectService.findById(id));
 		return "single-project";
 	}
 
-	 //This method combines Board and Current Sprint
-	 @GetMapping("/{projectId}/board")
-	 public String getProjectBoard(Model model, @PathVariable Integer projectId) {
-	 List<Sprint> sprints = new ArrayList<>(projectService.findById(projectId).getSprints());
-	 Sprint sprint = sprintService.findById(sprints.get(sprints.size()-1).getId());
-	 List<Task> toDo = sprint.getTasks().stream().map(task -> taskService.findById(task.getId())).filter(task -> task.getStatus().equals(TaskStatus.TO_DO))
-	 .collect(Collectors.toList());
-	 List<Task> inProgress = sprint.getTasks().stream().map(task -> taskService.findById(task.getId()))
-	 .filter(task -> task.getStatus().equals(TaskStatus.IN_PROGRESS)).collect(Collectors.toList());
-	 List<Task> inReview = sprint.getTasks().stream().map(task -> taskService.findById(task.getId()))
-	 .filter(task -> task.getStatus().equals(TaskStatus.IN_REVIEW)).collect(Collectors.toList());
-	 List<Task> done = sprint.getTasks().stream().map(task -> taskService.findById(task.getId())).filter(task -> task.getStatus().equals(TaskStatus.DONE))
-	 .collect(Collectors.toList());
+	// This method combines Board and Current Sprint
+	@GetMapping("/{projectId}/board")
+	public String getProjectBoard(Model model, @PathVariable Integer projectId) {
+		List<Sprint> sprints = new ArrayList<>(projectService.findById(projectId).getSprints());
+		Sprint sprint = sprintService.findById(sprints.get(sprints.size() - 1).getId());
+		List<Task> toDo = sprint.getTasks().stream().map(task -> taskService.findById(task.getId()))
+				.filter(task -> task.getStatus().equals(TaskStatus.TO_DO)).collect(Collectors.toList());
+		List<Task> inProgress = sprint.getTasks().stream().map(task -> taskService.findById(task.getId()))
+				.filter(task -> task.getStatus().equals(TaskStatus.IN_PROGRESS)).collect(Collectors.toList());
+		List<Task> inReview = sprint.getTasks().stream().map(task -> taskService.findById(task.getId()))
+				.filter(task -> task.getStatus().equals(TaskStatus.IN_REVIEW)).collect(Collectors.toList());
+		List<Task> done = sprint.getTasks().stream().map(task -> taskService.findById(task.getId()))
+				.filter(task -> task.getStatus().equals(TaskStatus.DONE)).collect(Collectors.toList());
 
-	 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	 User editor = userService.findByUsername(auth.getName());
-	 boolean canFinishProject = false;
-	 boolean canEditSprint = false;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User editor = userService.findByUsername(auth.getName());
+		boolean canFinishProject = false;
+		boolean canEditSprint = false;
 
-	 if (projectService.findById(projectId).getOwner().getId().equals(editor.getId())) {
-	 canFinishProject = true;
-	 }
+		if (projectService.findById(projectId).getOwner().getId().equals(editor.getId())) {
+			canFinishProject = true;
+		}
 
-	 if (projectService.findById(projectId).getOwner().getId().equals(editor.getId())) {
-	 canEditSprint = true;
-	 }
+		if (projectService.findById(projectId).getOwner().getId().equals(editor.getId())) {
+			canEditSprint = true;
+		}
 
-	 model.addAttribute("canFinishProject", canFinishProject);
-	 model.addAttribute("canEditSprint", canEditSprint);
-	 model.addAttribute("sprint", sprint);
-	 model.addAttribute("project", projectService.findById(projectId));
-	 model.addAttribute("owner", userService.findById(sprint.getOwner().getId()));
-	 model.addAttribute("toDoList", toDo);
-	 model.addAttribute("inProgressList", inProgress);
-	 model.addAttribute("inReviewList", inReview);
-	 model.addAttribute("doneList", done);
+		model.addAttribute("canFinishProject", canFinishProject);
+		model.addAttribute("canEditSprint", canEditSprint);
+		model.addAttribute("sprint", sprint);
+		model.addAttribute("project", projectService.findById(projectId));
+		model.addAttribute("owner", userService.findById(sprint.getOwner().getId()));
+		model.addAttribute("toDoList", toDo);
+		model.addAttribute("inProgressList", inProgress);
+		model.addAttribute("inReviewList", inReview);
+		model.addAttribute("doneList", done);
 
-	 return "single-project-board";
-	 }
+		return "single-project-board";
+	}
 
 	@GetMapping("/{projectId}/backlog")
 	public String getProjectBacklog(Model model, @PathVariable Integer projectId) {
@@ -156,14 +156,17 @@ public class ProjectController {
 		model.addAttribute("backlog", taskBacklog);
 		model.addAttribute("map", map);
 
-		log.debug("GET: Project with Id=%s : {}", projectId, projectService.findById(projectId));
+		log.info("GET: Project with Id=%s : {}", projectId, projectService.findById(projectId));
 		return "single-project-backlog";
 	}
 
 	@GetMapping("/{projectId}/sprint-results")
 	public String getPrevSprintResults(Model model, @PathVariable Integer projectId) {
 		List<SprintResult> sprintResultsList = new ArrayList<>();
-		projectService.findById(projectId).getSprints().forEach(sprint -> {if(sprint.getSprintResult() != null) sprintResultsList.add(sprint.getSprintResult());});
+		projectService.findById(projectId).getSprints().forEach(sprint -> {
+			if (sprint.getSprintResult() != null)
+				sprintResultsList.add(sprint.getSprintResult());
+		});
 		Map<SprintResult, Sprint> map = new HashMap<>();
 		sprintResultsList.forEach(sprintResult -> map.put(sprintResult, sprintResult.getSprint()));
 
@@ -178,7 +181,7 @@ public class ProjectController {
 		model.addAttribute("sprintResults", sprintResultsList);
 		model.addAttribute("map", map);
 
-		log.debug("GET: Project with Id=%s : {}", projectId, projectService.findById(projectId));
+		log.info("GET: Project with Id=%s : {}", projectId, projectService.findById(projectId));
 		return "single-project-sprint-results";
 	}
 
@@ -199,7 +202,7 @@ public class ProjectController {
 
 	@PutMapping("/edit")
 	public String updateProject(@RequestParam Integer projectId, @ModelAttribute Project project) {
-		log.debug("UPDATE: Project: {}", project);
+		log.info("UPDATE: Project: {}", project);
 		project.setId(projectId);
 		projectService.update(project, project.getBoard().getId(), null, project.getProjectResult().getId());
 		return "redirect:/projects";
@@ -222,14 +225,14 @@ public class ProjectController {
 	// model.addAttribute("projects", projectService.findBySearch(keywords));
 	// model.addAttribute("map", map);
 	//
-	// log.debug("GET: Projects by search: {}", projectService.findBySearch(keywords));
+	// log.info("GET: Projects by search: {}", projectService.findBySearch(keywords));
 	// return "all-projects";
 	// }
 
 	@DeleteMapping("/delete")
 	public String deleteProject(@RequestParam Integer projectId) {
 		Project project = projectService.findById(projectId);
-		log.debug("DELETE: Project: {}", project);
+		log.info("DELETE: Project: {}", project);
 
 		projectService.deleteById(projectId);
 		return "redirect:/projects";

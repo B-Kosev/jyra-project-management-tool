@@ -46,7 +46,7 @@ public class SprintResultController {
 		model.addAttribute("sprintResults", sprintResultService.findAll());
 		model.addAttribute("map", map);
 
-		log.debug("GET: Sprint results: {}", sprintResultService.findAll());
+		log.info("GET: Sprint results: {}", sprintResultService.findAll());
 		return "all-sprint-results";
 	}
 
@@ -69,7 +69,7 @@ public class SprintResultController {
 		model.addAttribute("userMap", userMap);
 		model.addAttribute("htmlService", htmlService);
 
-		log.debug("GET: Sprint result: {}", sprintResultService.findBySprintId(sprintId));
+		log.info("GET: Sprint result: {}", sprintResultService.findBySprintId(sprintId));
 		return "single-sprint-result";
 	}
 
@@ -86,7 +86,7 @@ public class SprintResultController {
 	public String addSprintResult(@ModelAttribute SprintResult sprintResult, @RequestParam Integer sprintId) {
 		sprintResultService.create(sprintResult, sprintId);
 
-		log.debug("POST: Sprint result: {}", sprintResult);
+		log.info("POST: Sprint result: {}", sprintResult);
 		return "redirect:/sprintresults";
 	}
 
@@ -103,7 +103,7 @@ public class SprintResultController {
 
 	@PutMapping("/edit")
 	public String updateSprintResult(@RequestParam Integer sprintResultId, @ModelAttribute SprintResult sprintResult) {
-		log.debug("UPDATE: Sprint result: {}", sprintResult);
+		log.info("UPDATE: Sprint result: {}", sprintResult);
 		sprintResult.setId(sprintResultId);
 		sprintResultService.update(sprintResult.getId(), sprintResult);
 		return "redirect:/sprintresults";
@@ -112,7 +112,7 @@ public class SprintResultController {
 	@DeleteMapping("/delete")
 	public String deleteSprintResult(@RequestParam Integer sprintResultId) {
 		SprintResult sprintResult = sprintResultService.findById(sprintResultId);
-		log.debug("DELETE: Sprint result: {}", sprintResult);
+		log.info("DELETE: Sprint result: {}", sprintResult);
 
 		sprintResultService.deleteById(sprintResultId);
 

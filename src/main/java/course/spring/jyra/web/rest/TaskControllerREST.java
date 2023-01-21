@@ -13,9 +13,11 @@ import course.spring.jyra.exception.InvalidClientDataException;
 import course.spring.jyra.model.ErrorResponse;
 import course.spring.jyra.model.Task;
 import course.spring.jyra.service.TaskService;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/tasks")
+@Slf4j
 public class TaskControllerREST {
 	private final TaskService taskService;
 
@@ -26,11 +28,13 @@ public class TaskControllerREST {
 
 	@GetMapping
 	public List<Task> getTask() {
+		log.info("GET: All tasks");
 		return taskService.findAll();
 	}
 
 	@GetMapping("/{taskId}")
 	public Task getTaskById(@PathVariable Integer taskId) {
+		log.info("GET: Task with ID={}", taskId);
 		return taskService.findById(taskId);
 	}
 
@@ -38,6 +42,7 @@ public class TaskControllerREST {
 	public ResponseEntity<Task> addTask(@RequestBody Task task, @RequestParam Integer reporterId, @RequestParam Integer projectId,
 			@RequestParam(required = false) Integer sprintId) {
 		Task created = taskService.create(task, reporterId, projectId, sprintId);
+		log.info("GET: Task with ID={}", created.getId());
 		return ResponseEntity
 				.created(ServletUriComponentsBuilder.fromCurrentRequest().pathSegment("{taskId}").buildAndExpand(created.getId()).toUri())
 				.body(created);
@@ -48,11 +53,13 @@ public class TaskControllerREST {
 		if (!taskId.equals(task.getId()))
 			throw new InvalidClientDataException(
 					String.format("Task ID %s from URL doesn't match ID %s in Request body", taskId, task.getId()));
+		log.info("PUT: Task with ID={}", taskId);
 		return taskService.update(task, sprintId);
 	}
 
 	@DeleteMapping("/{taskId}")
 	public Task deleteTask(@PathVariable Integer taskId) {
+		log.info("DELETE: Task with ID={}", taskId);
 		return taskService.deleteById(taskId);
 	}
 

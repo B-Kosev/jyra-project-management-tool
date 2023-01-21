@@ -39,14 +39,14 @@ public class UserController {
 	@GetMapping
 	public String getUsers(Model model) {
 		model.addAttribute("users", userService.findAll());
-		log.debug("GET: Users: {}", userService.findAll());
+		log.info("GET: Users: {}", userService.findAll());
 		return "all-users";
 	}
 
 	@DeleteMapping("/delete")
 	public String deleteUser(@RequestParam Integer userId) {
 		User user = userService.findById(userId);
-		log.debug("DELETE: User: {}", user);
+		log.info("DELETE: User: {}", user);
 		userService.deleteById(userId);
 		return "redirect:/users";
 	}
@@ -93,7 +93,7 @@ public class UserController {
 
 		model.addAttribute("htmlService", htmlService);
 
-		log.debug("GET: User with Id=%s : {}", id, userService.findById(id));
+		log.info("GET: User with Id=%s : {}", id, userService.findById(id));
 		return "single-user";
 	}
 
@@ -118,7 +118,7 @@ public class UserController {
 
 	@PutMapping("/edit")
 	public String updateUser(@RequestParam Integer userId, @ModelAttribute User user) {
-		log.debug("UPDATE: User: {}", user);
+		log.info("UPDATE: User: {}", user);
 		user.setId(userId);
 		userService.update(user);
 		return "redirect:/users";
@@ -128,7 +128,7 @@ public class UserController {
 	// public String getUsersBySearch(Model model, @RequestParam String keywords) {
 	// model.addAttribute("users", userService.findBySearch(keywords));
 	//
-	// log.debug("GET: Users by search: {}", userService.findBySearch(keywords));
+	// log.info("GET: Users by search: {}", userService.findBySearch(keywords));
 	// return "all-users";
 	// }
 }

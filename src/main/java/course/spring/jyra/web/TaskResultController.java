@@ -51,7 +51,7 @@ public class TaskResultController {
 		model.addAttribute("taskMap", taskMap);
 		model.addAttribute("userMap", userMap);
 
-		log.debug("GET: Task results: {}", taskResultService.findAll());
+		log.info("GET: Task results: {}", taskResultService.findAll());
 		return "all-task-results";
 	}
 
@@ -74,7 +74,7 @@ public class TaskResultController {
 		model.addAttribute("task", taskResult.getTask());
 		model.addAttribute("htmlService", htmlService);
 
-		log.debug("GET: Result of task with Id:%s {}", id, taskResultService.findAll());
+		log.info("GET: Result of task with Id:%s {}", id, taskResultService.findAll());
 		return "single-task-result";
 	}
 
@@ -99,7 +99,7 @@ public class TaskResultController {
 		task.setStatus(TaskStatus.DONE);
 		taskService.update(task, task.getSprint() != null ? task.getSprint().getId() : null);
 
-		log.debug("POST: Task result: {}", taskResult);
+		log.info("POST: Task result: {}", taskResult);
 		return "redirect:/taskresults";
 	}
 
@@ -123,14 +123,14 @@ public class TaskResultController {
 		task.setStatus(TaskStatus.IN_PROGRESS);
 		taskService.update(task, task.getSprint().getId());
 
-		log.debug("DELETE: Task result: {}", taskResult);
+		log.info("DELETE: Task result: {}", taskResult);
 		taskResultService.deleteById(taskResultId);
 		return "redirect:/taskresults";
 	}
 
 	@PutMapping("/edit")
 	public String updateTaskResult(@RequestParam Integer taskResultId, @ModelAttribute TaskResult taskResult) {
-		log.debug("UPDATE: Task result: {}", taskResult);
+		log.info("UPDATE: Task result: {}", taskResult);
 		taskResultService.update(taskResult.getTask().getId(), taskResult);
 		return "redirect:/taskresults";
 	}

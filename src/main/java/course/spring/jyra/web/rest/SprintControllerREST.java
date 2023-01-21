@@ -15,9 +15,11 @@ import course.spring.jyra.model.ErrorResponse;
 import course.spring.jyra.model.Sprint;
 import course.spring.jyra.service.BoardService;
 import course.spring.jyra.service.SprintService;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/sprints")
+@Slf4j
 public class SprintControllerREST {
 	private final SprintService sprintService;
 	private final BoardService boardService;
@@ -30,11 +32,13 @@ public class SprintControllerREST {
 
 	@GetMapping
 	public List<Sprint> getSprints() {
+		log.info("GET: All sprints");
 		return sprintService.findAll();
 	}
 
 	@GetMapping("/{sprintId}")
 	public Sprint getSprintById(@PathVariable Integer sprintId) {
+		log.info("GET: Sprint with ID={}", sprintId);
 		return sprintService.findById(sprintId);
 	}
 
@@ -45,6 +49,7 @@ public class SprintControllerREST {
 		Board board = boardService.create(Board.builder().build(), projectId, sprint.getId());
 		created = sprintService.update(created, board.getId(),
 				created.getSprintResult() == null ? null : created.getSprintResult().getId());
+		log.info("GET: Sprint with ID={}", created.getId());
 		return ResponseEntity
 				.created(ServletUriComponentsBuilder.fromCurrentRequest().pathSegment("{sprintId}").buildAndExpand(created.getId()).toUri())
 				.body(created);
@@ -56,11 +61,13 @@ public class SprintControllerREST {
 		if (!sprintId.equals(sprint.getId()))
 			throw new InvalidClientDataException(
 					String.format("Sprint ID %s from URL doesn't match ID %s in Request body", sprintId, sprint.getId()));
+		log.info("PUT: Sprint with ID={}", sprintId);
 		return sprintService.update(sprint, boardId, resultId);
 	}
 
 	@DeleteMapping("/{sprintId}")
 	public Sprint deleteSprint(@PathVariable Integer sprintId) {
+		log.info("DELETE: Sprint with ID={}", sprintId);
 		return sprintService.deleteById(sprintId);
 	}
 
