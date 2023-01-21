@@ -4,12 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import course.spring.jyra.model.User;
 import course.spring.jyra.service.UserService;
 
 @Configuration
@@ -37,9 +34,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// @formatter:off
         http.csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/").permitAll()
+//                    .antMatchers("/").permitAll()
                     .antMatchers("/login", "/register", "/index").permitAll()
-//                    .anyRequest().authenticated()
+                    .anyRequest().authenticated()
                     .and()
                 .formLogin()
                     .loginPage("/login")
@@ -62,12 +59,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// return userService::findByUsername;
 
 		// for debugging purposes
-		return new UserDetailsService() {
-			@Override
-			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-				User user = userService.findByUsername(username);
-				return user;
-			}
-		};
+		return userService::findByUsername;
 	}
 }
